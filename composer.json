@@ -1,0 +1,23 @@
+{
+  "name": "adrianhurban/realmbase",
+  "description": "RealmBase – Webová komunita RPG hráčov (semestrálna práca VAII)",
+  "type": "project",
+  "require": {
+    "php": "^8.2",
+    "ext-pdo": "*",
+    "ext-mysqli": "*",
+    "": ""
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Adrian Hurban",
+      "email": "adrian.hurban@example.com"
+    }
+  ],
+  "license": "MIT"
+}

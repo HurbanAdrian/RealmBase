@@ -5,7 +5,7 @@
     <title><?= htmlspecialchars($title ?? 'Bez názvu') ?></title>
 </head>
 <body>
-<h1><?= htmlspecialchars($title ?? 'Stránka') ?></h1>
-<p><?= htmlspecialchars($welcomeText ?? '') ?></p>
+<h1><?= htmlspecialchars($title) ?></h1>
+<p>Táto stránka je generovaná cez HomeController::about().</p>
 </body>
 </html>

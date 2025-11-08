@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace App\core;
 class Router {
     public function route($uri) {
         $uri = trim(parse_url($uri, PHP_URL_PATH), '/');

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/app/core/Database.php';
-use Core\Database;
+use App\core\Database;
 
 $db = Database::connect();
 echo "✅ Database connected successfully!";

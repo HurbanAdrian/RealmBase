@@ -1,30 +1,112 @@
-# About
+# 🌐 RealmBase — VAII Semester Project
+Moderná MVC webová aplikácia vytvorená ako semestrálny projekt pre predmet  
+**Vývoj intranetových a internetových aplikácií (VAII)** na  
+[FRI UNIZA](https://www.fri.uniza.sk/).
 
-This framework was created to support the teaching of the subject Development of intranet and intranet applications 
-(VAII) at the [Faculty of Management Science and Informatics](https://www.fri.uniza.sk/) of
-[University of Žilina](https://www.uniza.sk/). Framework demonstrates how the MVC architecture works.
+RealmBase je komunitná platforma umožňujúca spravovať kategórie a príspevky (CRUD),  
+s užívateľskými účtami, validáciou a vlastným responzívnym dizajnom.
 
-# Instructions and documentation 
+---
 
-The framework source code is fully commented. In case you need additional information to understand,
-visit the [WIKI stránky](https://github.com/thevajko/vaiicko/wiki/00-%C3%9Avodn%C3%A9-inform%C3%A1cie) (only in Slovak).
+## 📌 Obsah
+- [✨ Funkcionalita](#-funkcionalita)
+- [🧱 Použitý Framework](#-použitý-framework)
+- [🐳 Docker Inštalácia](#-docker-inštalácia)
+- [📂 Štruktúra projektu](#-štruktúra-projektu)
+- [🔧 Technológie](#-technológie)
+- [📘 Dokumentácia](#-dokumentácia)
+- [👤 Autor](#-autor)
 
-# Docker configuration
+---
 
-The Framework has a basic configuration for running and debugging web applications in the `<root>/docker` directory. 
-All necessary services are set in `docker-compose.yml` file. After starting them, it creates the following services:
+## ✨ Funkcionalita
 
-- web server (Apache) with the __PHP 8.3__ 
-- MariaDB database server with a created _database_ named according `MYSQL_DATABASE` environment variable
-- Adminer application for MariaDB administration
+### ✔ Kompletné CRUD operácie
+- Správa **kategórií**
+- Správa **príspevkov**
+- Admin UI + formuláre + tabuľky + validácie
 
-## Other notes:
+### ✔ Používateľský systém
+- Prihlásenie / odhlásenie
+- Autentifikácia (SessionAuthenticator)
+- Ochrana administrácie
 
-- __WWW document root__ is set to the `public` in the project directory.
-- The website is available at [http://localhost/](http://localhost/).
-- The server includes an extension for PHP code debugging [__Xdebug 3__](https://xdebug.org/), uses the  
-  port __9003__ and works in "auto-start" mode.
-- PHP contains the __PDO__ extension.
-- The database server is available locally on the port __3306__. The default login details can be found in `.env` file.
-- Adminer is available at [http://localhost:8080/](http://localhost:8080/)
+### ✔ Validácia vstupov
+- **Client-side** validácia cez JavaScript
+- **Server-side** validácia v controlleroch
+- Zobrazovanie chýb vo view
 
+### ✔ Netriviálny JavaScript
+- Live search filter v tabuľkách
+- Validácia formulárov
+- Dynamické skrývanie/odkrývanie prvkov
+
+### ✔ Responzívny dizajn
+- Mobilné menu (hamburger)
+- Prispôsobené karty + sekcie
+- Optimalizované CSS pre malé displeje
+
+### ✔ Vlastný moderný dizajn
+- Dark mode
+- Animácie
+- Zaoblené komponenty
+- Custom scrollbar
+
+---
+
+## 🧱 Použitý Framework
+
+Projekt je postavený na školskom MVC frameworku **VAIICko**, ktorý slúži  
+na výučbu architektúry MVC v predmete VAII.
+
+➡️ Originál frameworku:  
+https://github.com/thevajko/vaiicko
+
+Framework obsahuje:
+- MVC architektúru
+- routing
+- automatické načítanie controllerov a view
+- modelový layer s PDO
+- session manažment
+- response/render systém
+
+---
+
+## 🐳 Docker Inštalácia
+
+Projekt obsahuje pripravenú docker konfiguráciu v priečinku `docker/`.
+
+### 💻 Spustenie projektu
+```bash
+docker compose up --build
+```
+Dostupné služby:
+Služba	Adresa	Popis
+Web aplikácia	http://localhost/
+Apache + PHP 8.3
+Adminer	http://localhost:8080/
+Správa databázy
+MariaDB	localhost:3306	Databázový server
+Ďalšie informácie
+
+Document root je public/
+
+Xdebug beží na porte 9003
+
+PDO je súčasťou PHP kontajnera
+
+Prihlásenie do DB je v .env
+
+🔧 Technológie
+    PHP 8.3,
+    Bootstrap 5,
+    JavaScript (ES6),
+    MariaDB,
+    Docker,
+    MVC architektúra
+
+👤 Autor
+Adrian Hurban
+Semester Project – RealmBase
+Predmet: VAII – Vývoj intranetových a internetových aplikácií
+Fakulta riadenia a informatiky, UNIZA

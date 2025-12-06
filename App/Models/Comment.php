@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Core\Model;
+use Framework\Core\Model;
 
 class Comment extends Model
 {
@@ -12,3 +12,4 @@ class Comment extends Model
     protected string $content;
     protected string $created_at;
 }
+

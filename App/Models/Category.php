@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Core\Model;
+use Framework\Core\Model;
 
 class Category extends Model
 {
@@ -14,6 +14,6 @@ class Category extends Model
     public function getName(): string { return $this->name; }
     public function getDescription(): ?string { return $this->description; }
 
-    public function setName(string $n) { $this->name = $n; }
-    public function setDescription(?string $d) { $this->description = $d; }
+    public function setName(string $name) { $this->name = $name; }
+    public function setDescription(?string $desc) { $this->description = $desc; }
 }

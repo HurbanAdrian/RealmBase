@@ -2,30 +2,32 @@
 
 namespace App\Controllers;
 
-use App\Core\AControllerBase;
-use App\Core\Responses\Response;
+use Framework\Core\BaseController;
+use Framework\Http\Responses\Response;
 use App\Models\Category;
 
-class CategoriesController extends AControllerBase
+class CategoriesController extends BaseController
 {
     public function index(): Response
     {
         $categories = Category::getAll();
-        return $this->html(['categories' => $categories]);
+        return $this->view('Categories/index', [
+            'categories' => $categories
+        ]);
     }
 
     public function add(): Response
     {
         if ($this->request()->isPost()) {
-            $category = new Category();
-            $category->setName($this->request()->getValue('name'));
-            $category->setDescription($this->request()->getValue('description'));
-            $category->save();
+            $cat = new Category();
+            $cat->setName($this->request()->getPost('name'));
+            $cat->setDescription($this->request()->getPost('description'));
+            $cat->save();
 
-            return $this->redirect($this->url('categories.index'));
+            return $this->redirect('/?c=categories');
         }
 
-        return $this->html();
+        return $this->view('Categories/add');
     }
 
     public function edit(): Response
@@ -34,18 +36,20 @@ class CategoriesController extends AControllerBase
         $category = Category::getOne($id);
 
         if (!$category) {
-            throw new \App\Core\Http\Exceptions\HTTPException(404);
+            return $this->redirect('/?c=categories');
         }
 
         if ($this->request()->isPost()) {
-            $category->setName($this->request()->getValue('name'));
-            $category->setDescription($this->request()->getValue('description'));
+            $category->setName($this->request()->getPost('name'));
+            $category->setDescription($this->request()->getPost('description'));
             $category->save();
 
-            return $this->redirect($this->url('categories.index'));
+            return $this->redirect('/?c=categories');
         }
 
-        return $this->html(['category' => $category]);
+        return $this->view('Categories/edit', [
+            'category' => $category
+        ]);
     }
 
     public function delete(): Response
@@ -57,6 +61,6 @@ class CategoriesController extends AControllerBase
             $category->delete();
         }
 
-        return $this->redirect($this->url('categories.index'));
+        return $this->redirect('/?c=categories');
     }
 }

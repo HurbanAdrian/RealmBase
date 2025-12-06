@@ -3,64 +3,63 @@
 namespace App\Controllers;
 
 use Framework\Core\BaseController;
+use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use App\Models\Category;
 
 class CategoriesController extends BaseController
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $categories = Category::getAll();
-        return $this->view('Categories/index', [
-            'categories' => $categories
-        ]);
+        return $this->html(['categories' => $categories], 'index');
     }
 
-    public function add(): Response
+    public function add(Request $request): Response
     {
-        if ($this->request()->isPost()) {
-            $cat = new Category();
-            $cat->setName($this->request()->getPost('name'));
-            $cat->setDescription($this->request()->getPost('description'));
-            $cat->save();
+        if ($request->isPost()) {
+            $category = new Category();
 
-            return $this->redirect('/?c=categories');
+            $category->setName($request->post('name'));
+            $category->setDescription($request->post('description'));
+
+            $category->save();
+
+            return $this->redirect($this->url('categories.index'));
         }
 
-        return $this->view('Categories/add');
+        return $this->html([], 'add');
     }
 
-    public function edit(): Response
+    public function edit(Request $request): Response
     {
-        $id = $this->request()->getValue('id');
+        $id = $request->value('id');
         $category = Category::getOne($id);
 
         if (!$category) {
-            return $this->redirect('/?c=categories');
+            return $this->redirect($this->url('categories.index'));
         }
 
-        if ($this->request()->isPost()) {
-            $category->setName($this->request()->getPost('name'));
-            $category->setDescription($this->request()->getPost('description'));
+        if ($request->isPost()) {
+            $category->setName($request->post('name'));
+            $category->setDescription($request->post('description'));
             $category->save();
 
-            return $this->redirect('/?c=categories');
+            return $this->redirect($this->url('categories.index'));
         }
 
-        return $this->view('Categories/edit', [
-            'category' => $category
-        ]);
+        return $this->html(['category' => $category], 'edit');
     }
 
-    public function delete(): Response
+    public function delete(Request $request): Response
     {
-        $id = $this->request()->getValue('id');
+        $id = $request->value('id');
         $category = Category::getOne($id);
 
         if ($category) {
             $category->delete();
         }
 
-        return $this->redirect('/?c=categories');
+        return $this->redirect($this->url('categories.index'));
     }
 }

@@ -30,7 +30,6 @@ class PostsController extends BaseController
         $users = User::getAll();
 
         if ($request->isPost()) {
-
             // VALIDÁCIA TITLE
             if (strlen($title) < 3) {
                 $errors[] = "Nadpis musí mať aspoň 3 znaky.";
@@ -76,7 +75,8 @@ class PostsController extends BaseController
             'users' => $users,
             'category_id' => $categoryId,
             'user_id' => $userId
-            ], 'add'
+            ],
+            'add'
         );
     }
 
@@ -101,7 +101,6 @@ class PostsController extends BaseController
         $users = User::getAll();
 
         if ($request->isPost()) {
-
             if (strlen($title) < 3) {
                 $errors[] = "Nadpis musí mať aspoň 3 znaky.";
             }
@@ -143,7 +142,8 @@ class PostsController extends BaseController
             'user_id' => $userId,
             'categories' => $categories,
             'users' => $users
-            ], 'edit'
+            ],
+            'edit'
         );
     }
 

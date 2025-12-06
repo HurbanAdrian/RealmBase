@@ -1,8 +1,8 @@
 <?php
 /**
- * 
  *
- * @var \App\Models\Post[] $posts 
+ *
+ * @var \App\Models\Post[] $posts
  */
 ?>
 <h1>Príspevky</h1>
@@ -21,7 +21,7 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($posts as $p): ?>
+    <?php foreach ($posts as $p) : ?>
         <tr>
             <td><?php echo $p->getId() ?></td>
             <td><?php echo htmlspecialchars($p->getTitle()) ?></td>

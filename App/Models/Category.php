@@ -12,23 +12,23 @@ class Category extends Model
 
     public function getId(): ?int
     {
-        return $this->id; 
+        return $this->id;
     }
     public function getName(): string
     {
-        return $this->name; 
+        return $this->name;
     }
     public function getDescription(): ?string
     {
-        return $this->description; 
+        return $this->description;
     }
 
     public function setName(string $name)
     {
-        $this->name = $name; 
+        $this->name = $name;
     }
     public function setDescription(?string $desc)
     {
-        $this->description = $desc; 
+        $this->description = $desc;
     }
 }

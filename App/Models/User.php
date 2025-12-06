@@ -14,18 +14,18 @@ class User extends Model
 
     public function getId()
     {
-        return $this->id; 
+        return $this->id;
     }
     public function getUsername()
     {
-        return $this->username; 
+        return $this->username;
     }
     public function getEmail()
     {
-        return $this->email; 
+        return $this->email;
     }
     public function getRole()
     {
-        return $this->role; 
+        return $this->role;
     }
 }

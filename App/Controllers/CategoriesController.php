@@ -22,7 +22,6 @@ class CategoriesController extends BaseController
         $description = trim($request->post('description') ?? '');
 
         if ($request->isPost()) {
-
             // VALIDÁCIA NAZVU
             if (strlen($name) < 3) {
                 $errors[] = "Názov musí mať aspoň 3 znaky.";
@@ -56,7 +55,8 @@ class CategoriesController extends BaseController
             'errors' => $errors,
             'name' => $name,
             'description' => $description
-            ], 'add'
+            ],
+            'add'
         );
     }
 
@@ -77,7 +77,6 @@ class CategoriesController extends BaseController
 
 
         if ($request->isPost()) {
-
             // VALIDÁCIA NAZVU
             if (strlen($name) < 3) {
                 $errors[] = "Názov musí mať aspoň 3 znaky.";
@@ -90,7 +89,8 @@ class CategoriesController extends BaseController
             // UNIQUE CHECK → OKREM tejto kategórie
             $existing = Category::getAll();
             foreach ($existing as $cat) {
-                if (strtolower($cat->getName()) === strtolower($name)
+                if (
+                    strtolower($cat->getName()) === strtolower($name)
                     && $cat->getId() !== $category->getId()
                 ) {
                     $errors[] = "Kategória s týmto názvom už existuje.";
@@ -113,7 +113,8 @@ class CategoriesController extends BaseController
             'name' => $name,
             'description' => $description,
             'category' => $category
-            ], 'edit'
+            ],
+            'edit'
         );
     }
 

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @var string|null $message 
+ * @var string|null $message
  */
 /**
- * @var \Framework\Support\LinkGenerator $link 
+ * @var \Framework\Support\LinkGenerator $link
  */
 /**
- * @var \Framework\Support\View $view 
+ * @var \Framework\Support\View $view
  */
 
 $view->setLayout('auth');

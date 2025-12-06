@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @var \Framework\Http\HttpException $exception 
+ * @var \Framework\Http\HttpException $exception
  */
 /**
- * @var bool $showDetail 
+ * @var bool $showDetail
  */
 /**
- * @var \Framework\Support\View $view 
+ * @var \Framework\Support\View $view
  */
 
 $view->setLayout(null);

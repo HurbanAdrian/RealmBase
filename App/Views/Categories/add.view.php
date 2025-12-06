@@ -1,18 +1,18 @@
 <?php
 /**
- * 
  *
- * @var array $errors 
+ *
+ * @var array $errors
  */
 /**
- * 
  *
- * @var string|null $name 
+ *
+ * @var string|null $name
  */
 /**
- * 
  *
- * @var string|null $description 
+ *
+ * @var string|null $description
  */
 ?>
 <h1>Pridať kategóriu</h1>
@@ -20,7 +20,7 @@
 <?php if (!empty($errors)) : ?>
     <div class="alert alert-danger">
         <ul>
-            <?php foreach ($errors as $e): ?>
+            <?php foreach ($errors as $e) : ?>
                 <li><?php echo htmlspecialchars($e) ?></li>
             <?php endforeach; ?>
         </ul>

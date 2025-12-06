@@ -15,43 +15,43 @@ class Post extends Model
 
     public function getId()
     {
-        return $this->id; 
+        return $this->id;
     }
     public function getUserId()
     {
-        return $this->user_id; 
+        return $this->user_id;
     }
     public function getCategoryId()
     {
-        return $this->category_id; 
+        return $this->category_id;
     }
     public function getTitle()
     {
-        return $this->title; 
+        return $this->title;
     }
     public function getContent()
     {
-        return $this->content; 
+        return $this->content;
     }
     public function getCreatedAt()
     {
-        return $this->created_at; 
+        return $this->created_at;
     }
 
     public function setUserId(int $u)
     {
-        $this->user_id = $u; 
+        $this->user_id = $u;
     }
     public function setCategoryId(int $c)
     {
-        $this->category_id = $c; 
+        $this->category_id = $c;
     }
     public function setTitle(string $t)
     {
-        $this->title = $t; 
+        $this->title = $t;
     }
     public function setContent(string $c)
     {
-        $this->content = $c; 
+        $this->content = $c;
     }
 }

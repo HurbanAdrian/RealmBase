@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @var string $contentHTML 
+ * @var string $contentHTML
  */
 /**
- * @var \Framework\Auth\AppUser $user 
+ * @var \Framework\Auth\AppUser $user
  */
 /**
- * @var \Framework\Support\LinkGenerator $link 
+ * @var \Framework\Support\LinkGenerator $link
  */
 ?>
 <!DOCTYPE html>

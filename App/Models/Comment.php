@@ -12,4 +12,3 @@ class Comment extends Model
     protected string $content;
     protected string $created_at;
 }
-

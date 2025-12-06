@@ -1,8 +1,8 @@
 <?php
 /**
- * 
  *
- * @var \App\Models\Category[] $categories 
+ *
+ * @var \App\Models\Category[] $categories
  */
 ?>
 
@@ -21,7 +21,7 @@
     </thead>
 
     <tbody>
-    <?php foreach ($categories as $cat): ?>
+    <?php foreach ($categories as $cat) : ?>
         <tr>
             <td><?php echo $cat->getId() ?></td>
             <td><?php echo htmlspecialchars($cat->getName()) ?></td>

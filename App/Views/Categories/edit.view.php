@@ -1,8 +1,8 @@
 <?php
 /**
- * 
  *
- * @var \App\Models\Category $category 
+ *
+ * @var \App\Models\Category $category
  */
 ?>
 
@@ -11,7 +11,7 @@
 <?php if (!empty($errors)) : ?>
     <div class="alert alert-danger">
         <ul>
-            <?php foreach ($errors as $e): ?>
+            <?php foreach ($errors as $e) : ?>
                 <li><?php echo htmlspecialchars($e) ?></li>
             <?php endforeach; ?>
         </ul>

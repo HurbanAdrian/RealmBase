@@ -17,16 +17,12 @@
 <form method="post">
     <div class="mb-3">
         <label class="form-label">Názov:</label>
-        <label>
-            <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name ?? $category->getName()) ?>"
-        </label>" required>
+        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name ?? $category->getName()) ?>"" required>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Popis:</label>
-        <label>
-            <textarea name="description" class="form-control"><?= htmlspecialchars($category->getDescription()) ?></textarea>
-        </label>
+        <textarea name="description" class="form-control"><?= htmlspecialchars($category->getDescription()) ?></textarea>
     </div>
 
     <button class="btn btn-success">Uložiť</button>

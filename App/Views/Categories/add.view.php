@@ -18,17 +18,12 @@
 <form method="post">
     <div class="mb-3">
         <label class="form-label">Názov:</label>
-        <label>
-            <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($name ?? '') ?>">
-        </label>
-
+        <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($name ?? '') ?>">
     </div>
 
     <div class="mb-3">
         <label class="form-label">Popis:</label>
-        <label>
-            <textarea name="description" class="form-control"></textarea>
-        </label>
+        <textarea name="description" class="form-control"></textarea>
     </div>
 
     <button class="btn btn-success">Uložiť</button>

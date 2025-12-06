@@ -24,44 +24,36 @@
 <form method="post">
     <div class="mb-3">
         <label>Nadpis:</label>
-        <label>
-            <input name="title" class="form-control" value="<?= htmlspecialchars($title ?? '') ?>" required>
-        </label>
+        <input name="title" class="form-control" value="<?= htmlspecialchars($title ?? '') ?>" required>
     </div>
 
     <div class="mb-3">
         <label>Obsah:</label>
-        <label>
-            <textarea name="content" class="form-control" required><?= htmlspecialchars($content ?? '') ?></textarea>
-        </label>
+        <textarea name="content" class="form-control" required><?= htmlspecialchars($content ?? '') ?></textarea>
     </div>
 
     <div class="mb-3">
         <label>Kategória:</label>
-        <label>
-            <select name="category_id" class="form-control">
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= $cat->getId() ?>"
-                            <?= ($category_id == $cat->getId()) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat->getName()) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </label>
+        <select name="category_id" class="form-control">
+            <?php foreach ($categories as $cat): ?>
+                <option value="<?= $cat->getId() ?>"
+                        <?= ($category_id == $cat->getId()) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($cat->getName()) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <div class="mb-3">
         <label>Používateľ:</label>
-        <label>
-            <select name="user_id" class="form-control">
-                <?php foreach ($users as $u): ?>
-                    <option value="<?= $u->getId() ?>"
-                            <?= ($user_id == $u->getId()) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($u->getUsername()) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </label>
+        <select name="user_id" class="form-control">
+            <?php foreach ($users as $u): ?>
+                <option value="<?= $u->getId() ?>"
+                        <?= ($user_id == $u->getId()) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($u->getUsername()) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <button class="btn btn-success">Uložiť</button>

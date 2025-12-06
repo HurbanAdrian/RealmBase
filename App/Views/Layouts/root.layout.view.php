@@ -73,5 +73,6 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
     </div>
 <?php endif; ?>
 
+<script src="<?= $link->asset('js/script.js') ?>"></script>
 </body>
 </html>

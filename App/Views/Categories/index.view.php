@@ -16,6 +16,7 @@ $user = $this->app->getAppUser();
     <a class="btn btn-success mb-3" href="<?= $this->app->getLinkGenerator()->url('categories.add') ?>">Add Category</a>
 <?php endif; ?>
 
+<input type="text" id="tableSearch" class="form-control mb-3" placeholder="Search...">
 <table class="table table-dark table-striped table-custom">
     <thead>
     <tr>

@@ -15,6 +15,7 @@ $user = $this->app->getAppUser();
     <a class="btn btn-success" href="<?= $this->app->getLinkGenerator()->url('posts.add') ?>">Add Post</a>
 <?php endif; ?>
 
+<input type="text" id="tableSearch" class="form-control mb-3" placeholder="Search...">
 <table class="table table-dark table-striped table-custom">
     <thead>
     <tr>

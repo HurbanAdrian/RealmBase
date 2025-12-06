@@ -1,6 +1,23 @@
 console.log("SCRIPT SA NACITAL");
 
 document.addEventListener("DOMContentLoaded", () => {
+    // ============================
+    // LIVE SEARCH FILTER – FIXED
+    // ============================
+    const searchInput = document.getElementById("tableSearch");
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("keyup", () => {
+        const value = searchInput.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            const rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(value) ? "" : "none";
+        });
+    });
+
     console.log("Validácia beží — kontrolujem formulár");
     const form = document.querySelector("form");
     if (!form) return;

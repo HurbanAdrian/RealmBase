@@ -1,8 +1,14 @@
 <?php
 
-/** @var string|null $message */
-/** @var \Framework\Support\LinkGenerator $link */
-/** @var \Framework\Support\View $view */
+/**
+ * @var string|null $message 
+ */
+/**
+ * @var \Framework\Support\LinkGenerator $link 
+ */
+/**
+ * @var \Framework\Support\View $view 
+ */
 
 $view->setLayout('auth');
 ?>
@@ -14,9 +20,9 @@ $view->setLayout('auth');
                 <div class="card-body">
                     <h5 class="card-title text-center">Username</h5>
                     <div class="text-center text-danger mb-3">
-                        <?= @$message ?>
+                        <?php echo @$message ?>
                     </div>
-                    <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
+                    <form class="form-signin" method="post" action="<?php echo $link->url("login") ?>">
                         <div class="form-label-group mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input name="username" type="text" id="username" class="form-control" placeholder="Username"

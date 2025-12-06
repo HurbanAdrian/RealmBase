@@ -67,7 +67,8 @@ class PostsController extends BaseController
             }
         }
 
-        return $this->html([
+        return $this->html(
+            [
             'errors' => $errors,
             'title' => $title,
             'content' => $content,
@@ -75,7 +76,8 @@ class PostsController extends BaseController
             'users' => $users,
             'category_id' => $categoryId,
             'user_id' => $userId
-        ], 'add');
+            ], 'add'
+        );
     }
 
 
@@ -131,7 +133,8 @@ class PostsController extends BaseController
             }
         }
 
-        return $this->html([
+        return $this->html(
+            [
             'errors' => $errors,
             'post' => $post,
             'title' => $title,
@@ -140,7 +143,8 @@ class PostsController extends BaseController
             'user_id' => $userId,
             'categories' => $categories,
             'users' => $users
-        ], 'edit');
+            ], 'edit'
+        );
     }
 
 

@@ -1,5 +1,9 @@
 <?php
-/** @var \App\Models\Category[] $categories */
+/**
+ * 
+ *
+ * @var \App\Models\Category[] $categories 
+ */
 ?>
 
 <h1>Kategórie</h1>
@@ -19,13 +23,13 @@
     <tbody>
     <?php foreach ($categories as $cat): ?>
         <tr>
-            <td><?= $cat->getId() ?></td>
-            <td><?= htmlspecialchars($cat->getName()) ?></td>
-            <td><?= htmlspecialchars($cat->getDescription()) ?></td>
+            <td><?php echo $cat->getId() ?></td>
+            <td><?php echo htmlspecialchars($cat->getName()) ?></td>
+            <td><?php echo htmlspecialchars($cat->getDescription()) ?></td>
 
             <td>
-                <a href="/?c=categories&a=edit&id=<?= $cat->getId() ?>" class="btn btn-sm btn-warning">Upraviť</a>
-                <a href="/?c=categories&a=delete&id=<?= $cat->getId() ?>"
+                <a href="/?c=categories&a=edit&id=<?php echo $cat->getId() ?>" class="btn btn-sm btn-warning">Upraviť</a>
+                <a href="/?c=categories&a=delete&id=<?php echo $cat->getId() ?>"
                    class="btn btn-sm btn-danger"
                    onclick="return confirm('Naozaj zmazať?')">Zmazať</a>
             </td>

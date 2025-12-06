@@ -1,15 +1,27 @@
 <?php
-/** @var array $errors */
-/** @var string|null $name */
-/** @var string|null $description */
+/**
+ * 
+ *
+ * @var array $errors 
+ */
+/**
+ * 
+ *
+ * @var string|null $name 
+ */
+/**
+ * 
+ *
+ * @var string|null $description 
+ */
 ?>
 <h1>Pridať kategóriu</h1>
 
-<?php if (!empty($errors)): ?>
+<?php if (!empty($errors)) : ?>
     <div class="alert alert-danger">
         <ul>
             <?php foreach ($errors as $e): ?>
-                <li><?= htmlspecialchars($e) ?></li>
+                <li><?php echo htmlspecialchars($e) ?></li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -18,7 +30,7 @@
 <form method="post">
     <div class="mb-3">
         <label class="form-label">Názov:</label>
-        <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($name ?? '') ?>">
+        <input type="text" name="name" class="form-control" required value="<?php echo htmlspecialchars($name ?? '') ?>">
     </div>
 
     <div class="mb-3">

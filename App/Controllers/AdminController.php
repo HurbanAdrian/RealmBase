@@ -22,7 +22,7 @@ class AdminController extends BaseController
      * This method checks if the user is logged in, allowing or denying access to specific actions based
      * on the authentication state.
      *
-     * @param string $action The name of the action to authorize.
+     * @param  string $action The name of the action to authorize.
      * @return bool Returns true if the user is logged in; false otherwise.
      */
     public function authorize(Request $request, string $action): bool

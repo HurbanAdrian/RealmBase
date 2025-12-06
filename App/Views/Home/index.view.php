@@ -1,6 +1,8 @@
 <?php
 
-/** @var \Framework\Support\LinkGenerator $link */
+/**
+ * @var \Framework\Support\LinkGenerator $link 
+ */
 ?>
 
 <div class="container-fluid">
@@ -8,11 +10,11 @@
         <div class="col mt-5">
             <div class="text-center">
                 <h2>Vaííčko MVC FW</h2>
-                <h3>Version <?= App\Configuration::FW_VERSION ?></h3>
-                <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" alt="Framework Logo">
+                <h3>Version <?php echo App\Configuration::FW_VERSION ?></h3>
+                <img src="<?php echo $link->asset('images/vaiicko_logo.png') ?>" alt="Framework Logo">
                 <p>
                     Congratulations, you have successfully installed and run the framework
-                    <strong>Vaííčko</strong> <?= App\Configuration::FW_VERSION ?>!<br>
+                    <strong>Vaííčko</strong> <?php echo App\Configuration::FW_VERSION ?>!<br>
                     We hope that you will create a great application using this framework.<br>
                 </p>
                 <p>
@@ -31,7 +33,7 @@
                 <a href="mailto:Patrik.Hrkut@fri.uniza.sk">doc. Ing. Patrik Hrkút, PhD.</a><br>
                 <a href="mailto:Michal.Duracik@fri.uniza.sk">Ing. Michal Ďuračík, PhD.</a><br>
                 <a href="mailto:Matej.Mesko@fri.uniza.sk">Ing. Matej Meško, PhD.</a><br><br>
-                &copy; 2020-<?= date('Y') ?> University of Žilina, Faculty of Management Science and Informatics,
+                &copy; 2020-<?php echo date('Y') ?> University of Žilina, Faculty of Management Science and Informatics,
                 Department of Software Technologies
             </div>
         </div>

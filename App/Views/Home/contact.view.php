@@ -1,6 +1,8 @@
 <?php
 
-/** @var \Framework\Support\LinkGenerator $link */
+/**
+ * @var \Framework\Support\LinkGenerator $link 
+ */
 ?>
 
 <div class="row">
@@ -19,6 +21,6 @@
 </div>
 <div class="row mt-3">
     <div class="col">
-        <a href="<?= $link->url("home.index") ?>">Back to main page</a>
+        <a href="<?php echo $link->url("home.index") ?>">Back to main page</a>
     </div>
 </div>

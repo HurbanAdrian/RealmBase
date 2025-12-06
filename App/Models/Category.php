@@ -10,10 +10,25 @@ class Category extends Model
     protected string $name;
     protected ?string $description;
 
-    public function getId(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
-    public function getDescription(): ?string { return $this->description; }
+    public function getId(): ?int
+    {
+        return $this->id; 
+    }
+    public function getName(): string
+    {
+        return $this->name; 
+    }
+    public function getDescription(): ?string
+    {
+        return $this->description; 
+    }
 
-    public function setName(string $name) { $this->name = $name; }
-    public function setDescription(?string $desc) { $this->description = $desc; }
+    public function setName(string $name)
+    {
+        $this->name = $name; 
+    }
+    public function setDescription(?string $desc)
+    {
+        $this->description = $desc; 
+    }
 }

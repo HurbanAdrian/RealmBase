@@ -17,19 +17,48 @@ class CategoriesController extends BaseController
 
     public function add(Request $request): Response
     {
+        $errors = [];
+        $name = trim($request->post('name') ?? '');
+        $description = trim($request->post('description') ?? '');
+
         if ($request->isPost()) {
-            $category = new Category();
 
-            $category->setName($request->post('name'));
-            $category->setDescription($request->post('description'));
+            // VALIDÁCIA NAZVU
+            if (strlen($name) < 3) {
+                $errors[] = "Názov musí mať aspoň 3 znaky.";
+            }
 
-            $category->save();
+            if (strlen($name) > 50) {
+                $errors[] = "Názov kategórie môže mať maximálne 50 znakov.";
+            }
 
-            return $this->redirect($this->url('categories.index'));
+            // UNIKÁTNOSŤ
+            $existing = Category::getAll();
+            foreach ($existing as $cat) {
+                if (strtolower($cat->getName()) === strtolower($name)) {
+                    $errors[] = "Kategória s týmto názvom už existuje.";
+                    break;
+                }
+            }
+
+            if (empty($errors)) {
+                $category = new Category();
+                $category->setName($name);
+                $category->setDescription($description);
+                $category->save();
+
+                return $this->redirect($this->url('categories.index'));
+            }
         }
 
-        return $this->html([], 'add');
+        return $this->html([
+            'errors' => $errors,
+            'name' => $name,
+            'description' => $description
+        ], 'add');
     }
+
+
 
     public function edit(Request $request): Response
     {
@@ -40,16 +69,51 @@ class CategoriesController extends BaseController
             return $this->redirect($this->url('categories.index'));
         }
 
-        if ($request->isPost()) {
-            $category->setName($request->post('name'));
-            $category->setDescription($request->post('description'));
-            $category->save();
+        $errors = [];
+        $name = trim($request->post('name') ?? '');
+        $description = trim($request->post('description') ?? '');
 
-            return $this->redirect($this->url('categories.index'));
+
+        if ($request->isPost()) {
+
+            // VALIDÁCIA NAZVU
+            if (strlen($name) < 3) {
+                $errors[] = "Názov musí mať aspoň 3 znaky.";
+            }
+
+            if (strlen($name) > 50) {
+                $errors[] = "Názov kategórie môže mať maximálne 50 znakov.";
+            }
+
+            // UNIQUE CHECK → OKREM tejto kategórie
+            $existing = Category::getAll();
+            foreach ($existing as $cat) {
+                if (
+                    strtolower($cat->getName()) === strtolower($name)
+                    && $cat->getId() !== $category->getId()
+                ) {
+                    $errors[] = "Kategória s týmto názvom už existuje.";
+                    break;
+                }
+            }
+
+            if (empty($errors)) {
+                $category->setName($name);
+                $category->setDescription($description);
+                $category->save();
+
+                return $this->redirect($this->url('categories.index'));
+            }
         }
 
-        return $this->html(['category' => $category], 'edit');
+        return $this->html([
+            'errors' => $errors,
+            'name' => $name,
+            'description' => $description,
+            'category' => $category
+        ], 'edit');
     }
+
 
     public function delete(Request $request): Response
     {

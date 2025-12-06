@@ -1,41 +1,46 @@
 <?php
-
-/**
- * @var \Framework\Support\LinkGenerator $link
- */
+/** @var \Framework\Core\App $this */
+$link = $this->app->getLinkGenerator();
 ?>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col mt-5">
-            <div class="text-center">
-                <h2>Vaííčko MVC FW</h2>
-                <h3>Version <?php echo App\Configuration::FW_VERSION ?></h3>
-                <img src="<?php echo $link->asset('images/vaiicko_logo.png') ?>" alt="Framework Logo">
-                <p>
-                    Congratulations, you have successfully installed and run the framework
-                    <strong>Vaííčko</strong> <?php echo App\Configuration::FW_VERSION ?>!<br>
-                    We hope that you will create a great application using this framework.<br>
-                </p>
-                <p>
-                    This simple framework was created for teaching purposes and to better understand how the MVC
-                    architecture works.<br>
-                    It is intended for students of the subject <em>web application development</em>, but not only
-                    for them.
-                </p>
-            </div>
+<div class="home-wrapper">
+
+    <!-- HERO -->
+    <section class="home-section hero">
+        <h1>Welcome to RealmBase</h1>
+        <p>A community platform for sharing posts, categories and creativity.</p>
+    </section>
+
+    <!-- FEATURED -->
+    <section class="home-section featured">
+        <h2>Featured Content</h2>
+        <p>Explore highlighted posts and trending content.</p>
+    </section>
+
+    <!-- GRID CARDS -->
+    <section class="home-cards">
+        <div class="home-card">
+            <h3>Categories</h3>
+            <p>View and manage content categories.</p>
+            <a href="<?= $link->url('categories.index') ?>" class="btn btn-primary w-100">Open Categories</a>
         </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col text-center">
-            <h4>Authors</h4>
-            <div>
-                <a href="mailto:Patrik.Hrkut@fri.uniza.sk">doc. Ing. Patrik Hrkút, PhD.</a><br>
-                <a href="mailto:Michal.Duracik@fri.uniza.sk">Ing. Michal Ďuračík, PhD.</a><br>
-                <a href="mailto:Matej.Mesko@fri.uniza.sk">Ing. Matej Meško, PhD.</a><br><br>
-                &copy; 2020-<?php echo date('Y') ?> University of Žilina, Faculty of Management Science and Informatics,
-                Department of Software Technologies
-            </div>
+
+        <div class="home-card">
+            <h3>Posts</h3>
+            <p>Browse posts submitted by the community.</p>
+            <a href="<?= $link->url('posts.index') ?>" class="btn btn-primary w-100">View Posts</a>
         </div>
-    </div>
+
+        <div class="home-card">
+            <h3>Account</h3>
+            <p>Log in to manage posts or create new ones.</p>
+            <a href="<?= App\Configuration::LOGIN_URL ?>" class="btn btn-primary w-100">Login</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section class="footer-note text-center">
+        <small>© <?= date("Y") ?> RealmBase — VAII Semester Project</small>
+    </section>
+
 </div>

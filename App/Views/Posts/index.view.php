@@ -7,9 +7,15 @@
 ?>
 <h1>Príspevky</h1>
 
-<a href="/?c=posts&a=add" class="btn btn-primary mb-3">Pridať príspevok</a>
+<?php
+$user = $this->app->getAppUser();
+?>
 
-<table class="table table-striped">
+<?php if ($user->isLoggedIn()) : ?>
+    <a class="btn btn-success" href="<?= $this->app->getLinkGenerator()->url('posts.add') ?>">Add Post</a>
+<?php endif; ?>
+
+<table class="table table-dark table-striped table-custom">
     <thead>
     <tr>
         <th>ID</th>

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Framework\Core\Model;
+use Framework\Core\IIdentity;
 
-class User extends Model
+class User extends Model implements IIdentity
 {
+    protected static ?string $tableName = 'users';
+
     protected ?int $id = null;
     protected string $username;
     protected string $email;
@@ -16,9 +19,9 @@ class User extends Model
     {
         return $this->id;
     }
-    public function getUsername()
+    public function getName(): string
     {
-        return $this->username;
+        return $this->username ?? '';
     }
     public function getEmail()
     {
@@ -27,5 +30,9 @@ class User extends Model
     public function getRole()
     {
         return $this->role;
+    }
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }

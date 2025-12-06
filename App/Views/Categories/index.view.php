@@ -8,9 +8,15 @@
 
 <h1>Kategórie</h1>
 
-<a href="/?c=categories&a=add" class="btn btn-primary mb-3">Pridať kategóriu</a>
+<?php
+$user = $this->app->getAppUser();
+?>
 
-<table class="table table-striped">
+<?php if ($user->isLoggedIn()) : ?>
+    <a class="btn btn-success mb-3" href="<?= $this->app->getLinkGenerator()->url('categories.add') ?>">Add Category</a>
+<?php endif; ?>
+
+<table class="table table-dark table-striped table-custom">
     <thead>
     <tr>
         <th>ID</th>

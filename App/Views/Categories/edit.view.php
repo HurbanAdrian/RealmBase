@@ -21,7 +21,7 @@
 <form method="post">
     <div class="mb-3">
         <label class="form-label">Názov:</label>
-        <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($name ?? $category->getName()) ?>"" required>
+        <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($name ?? $category->getName()) ?>" required>
     </div>
 
     <div class="mb-3">

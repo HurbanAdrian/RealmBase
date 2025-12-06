@@ -1,7 +1,209 @@
+/* ======================== */
+/*       REALMBASED DARK     */
+/* ======================== */
+
+body {
+    background-color: #171717;
+    color: #e5e5e5;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    margin: 0;
+}
+
+/* ======================== */
+/*          NAVBAR          */
+/* ======================== */
+
 .navbar {
-    border-bottom: 1px solid grey;
+    background-color: #0f0f0f !important;
+    border-bottom: 1px solid #222;
 }
 
 .navbar-brand img {
-    width: 50px;
+    height: 32px;
+}
+
+.nav-link {
+    color: #cfcfcf !important;
+    padding: 10px 16px;
+    font-size: 15px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #222 !important;
+    border-radius: 6px;
+    color: white !important;
+}
+
+/* Hamburger icon brightness */
+.navbar-toggler-icon {
+    filter: brightness(250%);
+}
+
+/* Collapsed mobile menu */
+.navbar-collapse {
+    background-color: #111 !important;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.navbar-collapse .nav-link:hover {
+    background-color: #222 !important;
+    border-radius: 8px;
+}
+
+/* ======================== */
+/*   DEFAULT PAGE CONTENT   */
+/* ======================== */
+
+.web-content {
+    background: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+}
+
+/* ======================== */
+/*          TABLES          */
+/* ======================== */
+
+table {
+    background-color: #1f1f1f !important;
+    color: #e5e5e5;
+    border-radius: 10px;
+}
+
+th {
+    background-color: #f5c542 !important;
+    color: #000 !important;
+}
+
+tr:nth-child(even) {
+    background-color: #2a2a2a !important;
+}
+
+tr:hover {
+    background-color: #333 !important;
+}
+
+/* ======================== */
+/*         FORM INPUTS      */
+/* ======================== */
+
+.form-control {
+    background: #2a2a2a !important;
+    color: #e5e5e5 !important;
+    border-radius: 8px !important;
+    border: 1px solid #444 !important;
+}
+
+.form-control:focus {
+    border-color: #f5c542 !important;
+    box-shadow: 0 0 0 0.2rem rgba(245,197,66,0.3) !important;
+}
+
+/* ======================== */
+/*          BUTTONS         */
+/* ======================== */
+
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: #f5c542 !important;
+    color: black !important;
+    border: none;
+}
+
+/* ======================== */
+/*     HOMEPAGE LAYOUT      */
+/* ======================== */
+
+.home-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.home-section {
+    background: #1e1e1e;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+
+.home-section p,
+.home-section .text-muted {
+    color: #dcdcdc !important;
+}
+
+/* CARDS GRID */
+.home-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.home-card {
+    background: #242424;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    text-align: center;
+}
+
+/* FOOTER */
+.footer-note small,
+.text-muted {
+    color: #dcdcdc !important;
+}
+
+/* ======================== */
+/*     MOBILE OPTIMIZATION   */
+/* ======================== */
+
+@media (max-width: 768px) {
+
+    .home-wrapper { padding: 10px; }
+
+    .home-section { padding: 20px; }
+
+    .home-cards { grid-template-columns: 1fr; }
+
+    .home-card { padding: 20px; }
+}
+
+/* ======================== */
+/* HOMEPAGE FULL-WIDTH FIX  */
+/* ======================== */
+
+.web-content-full {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.web-content--full {
+    background: transparent;
+    padding: 20px;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .web-content--full {
+        background: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 25px;
+    }
 }

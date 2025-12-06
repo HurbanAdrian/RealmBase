@@ -83,7 +83,7 @@
             <?php foreach ($users as $u) : ?>
                 <option value="<?php echo $u->getId() ?>"
                         <?php echo ($user_id ?? $post->getUserId()) == $u->getId() ? 'selected' : '' ?>>
-                    <?php echo htmlspecialchars($u->getUsername()) ?>
+                    <?php echo htmlspecialchars($u->getName()) ?>
                 </option>
             <?php endforeach; ?>
         </select>

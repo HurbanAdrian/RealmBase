@@ -30,10 +30,28 @@
     <script src="<?php echo $link->asset('js/script.js') ?>"></script>
 </head>
 <body>
-<div class="container-fluid mt-3">
-    <div class="web-content">
-        <?php echo $contentHTML ?>
+<?php
+// zistíme, či sme na homepage
+$isHome = ($_GET['c'] ?? 'home') === 'home' && ($_GET['a'] ?? 'index') === 'index';
+?>
+
+<?php if ($isHome): ?>
+
+    <!-- FULL WIDTH HOMEPAGE (bez bootstrap containeru) -->
+    <div class="web-content-full">
+        <?= $contentHTML ?>
     </div>
-</div>
+
+<?php else: ?>
+
+    <!-- OSTATNÉ STRÁNKY OSTÁVAJÚ V BOOTSTRAP CONTAINERI -->
+    <div class="container mt-4">
+        <div class="web-content">
+            <?= $contentHTML ?>
+        </div>
+    </div>
+
+<?php endif; ?>
+
 </body>
 </html>

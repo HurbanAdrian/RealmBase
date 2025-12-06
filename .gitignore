@@ -1,5 +1,1 @@
-/vendor/
-/.idea/
-/node_modules/
-/public/uploads/
-/config/database.php
+.idea

@@ -38,6 +38,10 @@ $view->setLayout('auth');
                             <button class="btn btn-primary" type="submit" name="submit">Log in
                             </button>
                         </div>
+
+                        <div class="text-center mt-3">
+                            <p>Ešte nemáš účet? <a href="<?= $link->url('auth.register') ?>">Zaregistruj sa</a></p>
+                        </div>
                     </form>
                 </div>
             </div>

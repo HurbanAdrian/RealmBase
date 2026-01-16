@@ -1,46 +1,55 @@
 <?php
-/**
- *
- *
- * @var \App\Models\Category[] $categories
- */
-?>
+/** @var array $categories */
+/** @var \App\Models\Category $category */
+/** @var \Framework\Core\App $this */
 
-<h1>Kategórie</h1>
-
-<?php
+$link = $this->app->getLinkGenerator();
 $user = $this->app->getAppUser();
+$isAdmin = ($user && $user->isLoggedIn() && $user->getRole() === 'admin');
 ?>
 
-<?php if ($user->isLoggedIn()) : ?>
-    <a class="btn btn-success mb-3" href="<?= $this->app->getLinkGenerator()->url('categories.add') ?>">Add Category</a>
-<?php endif; ?>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Kategórie</h1>
 
-<input type="text" id="tableSearch" class="form-control mb-3" placeholder="Search...">
-<table class="table table-dark table-striped table-custom">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Názov</th>
-        <th>Popis</th>
-        <th>Akcie</th>
-    </tr>
-    </thead>
+        <?php if ($isAdmin): ?>
+            <a href="<?= $link->url('categories.add') ?>" class="btn btn-success">Pridať novú kategóriu</a>
+        <?php endif; ?>
+    </div>
 
-    <tbody>
-    <?php foreach ($categories as $cat) : ?>
-        <tr>
-            <td><?php echo $cat->getId() ?></td>
-            <td><?php echo htmlspecialchars($cat->getName()) ?></td>
-            <td><?php echo htmlspecialchars($cat->getDescription()) ?></td>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Názov</th>
+                <th>Popis</th>
+                <?php if ($isAdmin): ?>
+                    <th class="text-end">Akcie</th>
+                <?php endif; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($categories as $category): ?>
+                <tr>
+                    <td><?= $category->getId() ?></td>
+                    <td>
+                        <a href="<?= $link->url('posts.index') ?>&category=<?= $category->getId() ?>"
+                           class="text-decoration-none fw-bold">
+                            <?= htmlspecialchars($category->getName()) ?>
+                        </a>
+                    </td>
+                    <td><?= htmlspecialchars($category->getDescription()) ?></td>
 
-            <td>
-                <a href="/?c=categories&a=edit&id=<?php echo $cat->getId() ?>" class="btn btn-sm btn-warning">Upraviť</a>
-                <a href="/?c=categories&a=delete&id=<?php echo $cat->getId() ?>"
-                   class="btn btn-sm btn-danger"
-                   onclick="return confirm('Naozaj zmazať?')">Zmazať</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+                    <?php if ($isAdmin): ?>
+                        <td class="text-end">
+                            <a href="<?= $link->url('categories.edit', ['id' => $category->getId()]) ?>" class="btn btn-sm btn-warning">Upraviť</a>
+                            <a href="<?= $link->url('categories.delete', ['id' => $category->getId()]) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Naozaj zmazať?')">Zmazať</a>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

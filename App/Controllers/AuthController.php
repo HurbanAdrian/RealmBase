@@ -21,11 +21,6 @@ class AuthController extends BaseController
 {
     /**
      * Redirects to the login page.
-     *
-     * This action serves as the default landing point for the authentication section of the application, directing
-     * users to the login URL specified in the configuration.
-     *
-     * @return Response The response object for the redirection to the login page.
      */
     public function index(Request $request): Response
     {
@@ -33,15 +28,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * Authenticates a user and processes the login request.
-     *
-     * This action handles user login attempts. If the login form is submitted, it attempts to authenticate the user
-     * with the provided credentials. Upon successful login, the user is redirected to the admin dashboard.
-     * If authentication fails, an error message is displayed on the login page.
-     *
-     * @return Response The response object which can either redirect on success or render the login view with
-     *                  an error message on failure.
-     * @throws Exception If the parameter for the URL generator is invalid throws an exception.
+     * Prihlásenie používateľa
      */
     public function login(Request $request): Response
     {
@@ -49,7 +36,9 @@ class AuthController extends BaseController
         if ($request->hasValue('submit')) {
             $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
             if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+                // Po úspešnom prihlásení presmerujeme.
+                // Ak chceš, aby bežní useri nešli na admin stránku, môžeš to zmeniť na 'home.index'
+                return $this->redirect($this->url("home.index"));
             }
         }
 
@@ -58,16 +47,83 @@ class AuthController extends BaseController
     }
 
     /**
-     * Logs out the current user.
-     *
-     * This action terminates the user's session and redirects them to a view. It effectively clears any authentication
-     * tokens or session data associated with the user.
-     *
-     * @return ViewResponse The response object that renders the logout view.
+     * Odhlásenie
      */
     public function logout(Request $request): Response
     {
         $this->app->getAuthenticator()->logout();
-        return $this->html();
+        // Po odhlásení presmerujeme na login alebo domov
+        return $this->redirect($this->url('home.index'));
+    }
+
+    /**
+     * Registrácia nového používateľa
+     */
+    public function register(Request $request): Response
+    {
+        $data = [];
+        $errors = [];
+
+        // OPRAVA: Používame premennú $request, ktorá prišla ako parameter, nie $this->request()
+        // Poznámka: Ak tvoj framework nemá metódu isPost(), použi: $request->server('REQUEST_METHOD') === 'POST'
+        // Alebo skontroluj či bol odoslaný formulár
+        $isPost = false;
+        if (method_exists($request, 'isPost')) {
+            $isPost = $request->isPost();
+        } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $isPost = true;
+        }
+
+        if ($isPost) {
+            $username = $request->post('username');
+            $email = $request->post('email');
+            $password = $request->post('password');
+            $passwordVerify = $request->post('password_verify');
+
+            // 1. Validácia
+            if (empty($username) || strlen($username) < 3) {
+                $errors[] = "Meno musí mať aspoň 3 znaky.";
+            }
+            if (empty($password) || strlen($password) < 4) {
+                $errors[] = "Heslo musí mať aspoň 4 znaky.";
+            }
+            if ($password !== $passwordVerify) {
+                $errors[] = "Heslá sa nezhodujú.";
+            }
+
+            // Kontrola, či užívateľ s takým menom už neexistuje
+            $existingUsers = \App\Models\User::getAll();
+            foreach ($existingUsers as $u) {
+                if ($u->getUsername() === $username) {
+                    $errors[] = "Používateľ s týmto menom už existuje.";
+                    break;
+                }
+            }
+
+            // 2. Ak je všetko OK, vytvoríme usera
+            if (empty($errors)) {
+                $user = new \App\Models\User();
+                $user->setUsername($username);
+                $user->setEmail($email);
+
+                // Heslo zahashujeme
+                $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+
+                $user->setRole('user'); // Bežný user
+                $user->save();
+
+                // Presmerujeme na login
+                return $this->redirect($this->url('auth.login'));
+            }
+
+            // Ak boli chyby, vrátime ich do formulára
+            $data['username'] = $username;
+            $data['email'] = $email;
+        }
+
+        return $this->html([
+            'errors' => $errors,
+            'formData' => $data ?? []
+        ], 'register');
     }
 }

@@ -54,4 +54,20 @@ class Post extends Model
     {
         $this->content = $c;
     }
+
+    /**
+     * Helper metóda na získanie objektu autora článku
+     */
+    public function getAuthor(): ?User
+    {
+        return User::getOne($this->user_id);
+    }
+
+    /**
+     * Helper metóda na získanie objektu kategórie
+     */
+    public function getCategory(): ?Category
+    {
+        return Category::getOne($this->category_id);
+    }
 }

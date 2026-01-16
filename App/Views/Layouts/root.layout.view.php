@@ -49,6 +49,12 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
 
             <ul class="navbar-nav ms-auto">
                 <?php if ($user->isLoggedIn()): ?>
+                    <?php if ($user->getRole() === 'admin'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger fw-bold" href="<?= $link->url('admin.index') ?>">ADMIN</a>
+                        </li>
+                    <?php endif; ?>
+
                     <li class="nav-item"><span class="nav-link">👤 <?= $user->getName() ?></span></li>
                     <li class="nav-item"><a class="nav-link btn btn-warning px-3" href="<?= $link->url('auth.logout') ?>">Logout</a></li>
                 <?php else: ?>

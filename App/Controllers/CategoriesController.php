@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\Category;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
-use App\Models\Category;
 
 class CategoriesController extends BaseController
 {
@@ -17,27 +17,19 @@ class CategoriesController extends BaseController
 
     public function add(Request $request): Response
     {
+        // 1. OCHRANA: Iba admin
+        $user = $this->app->getAppUser();
+        if (!$user || !$user->isLoggedIn() || $user->getRole() !== 'admin') {
+            return $this->redirect($this->url('categories.index'));
+        }
+
+        $name = $request->post('name');
+        $description = $request->post('description');
         $errors = [];
-        $name = trim($request->post('name') ?? '');
-        $description = trim($request->post('description') ?? '');
 
         if ($request->isPost()) {
-            // VALIDÁCIA NAZVU
             if (strlen($name) < 3) {
-                $errors[] = "Názov musí mať aspoň 3 znaky.";
-            }
-
-            if (strlen($name) > 50) {
-                $errors[] = "Názov kategórie môže mať maximálne 50 znakov.";
-            }
-
-            // UNIKÁTNOSŤ
-            $existing = Category::getAll();
-            foreach ($existing as $cat) {
-                if (strtolower($cat->getName()) === strtolower($name)) {
-                    $errors[] = "Kategória s týmto názvom už existuje.";
-                    break;
-                }
+                $errors[] = "Názov musí mať aspoň 3 znaky";
             }
 
             if (empty($errors)) {
@@ -45,26 +37,26 @@ class CategoriesController extends BaseController
                 $category->setName($name);
                 $category->setDescription($description);
                 $category->save();
-
                 return $this->redirect($this->url('categories.index'));
             }
         }
 
-        return $this->html(
-            [
+        return $this->html([
             'errors' => $errors,
             'name' => $name,
             'description' => $description
-            ],
-            'add'
-        );
+        ], 'add');
     }
-
-
 
     public function edit(Request $request): Response
     {
-        $id = $request->value('id');
+        // 1. OCHRANA: Iba admin
+        $user = $this->app->getAppUser();
+        if (!$user || !$user->isLoggedIn() || $user->getRole() !== 'admin') {
+            return $this->redirect($this->url('categories.index'));
+        }
+
+        $id = (int)$request->value('id');
         $category = Category::getOne($id);
 
         if (!$category) {
@@ -72,60 +64,60 @@ class CategoriesController extends BaseController
         }
 
         $errors = [];
-        $name = trim($request->post('name') ?? '');
-        $description = trim($request->post('description') ?? '');
-
-
         if ($request->isPost()) {
-            // VALIDÁCIA NAZVU
+            $name = $request->post('name');
+            $description = $request->post('description');
+
             if (strlen($name) < 3) {
-                $errors[] = "Názov musí mať aspoň 3 znaky.";
-            }
-
-            if (strlen($name) > 50) {
-                $errors[] = "Názov kategórie môže mať maximálne 50 znakov.";
-            }
-
-            // UNIQUE CHECK → OKREM tejto kategórie
-            $existing = Category::getAll();
-            foreach ($existing as $cat) {
-                if (
-                    strtolower($cat->getName()) === strtolower($name)
-                    && $cat->getId() !== $category->getId()
-                ) {
-                    $errors[] = "Kategória s týmto názvom už existuje.";
-                    break;
-                }
+                $errors[] = "Názov musí mať aspoň 3 znaky";
             }
 
             if (empty($errors)) {
                 $category->setName($name);
                 $category->setDescription($description);
                 $category->save();
-
                 return $this->redirect($this->url('categories.index'));
             }
         }
 
-        return $this->html(
-            [
-            'errors' => $errors,
-            'name' => $name,
-            'description' => $description,
-            'category' => $category
-            ],
-            'edit'
-        );
+        return $this->html(['category' => $category, 'errors' => $errors], 'edit');
     }
-
 
     public function delete(Request $request): Response
     {
-        $id = $request->value('id');
+        // 1. OCHRANA: Iba admin
+        $user = $this->app->getAppUser();
+        if (!$user || !$user->isLoggedIn() || $user->getRole() !== 'admin') {
+            return $this->redirect($this->url('categories.index'));
+        }
+
+        $id = (int)$request->value('id');
         $category = Category::getOne($id);
 
         if ($category) {
-            $category->delete();
+            try {
+                // --- KASKÁDOVÉ MAZANIE ---
+
+                // 1. Nájdi všetky články v tejto kategórii
+                $posts = \App\Models\Post::getAll("category_id = ?", [$id]);
+
+                foreach ($posts as $post) {
+                    // 2. Pre každý článok najprv zmaž jeho komentáre
+                    $comments = \App\Models\Comment::getAll("post_id = ?", [$post->getId()]);
+                    foreach ($comments as $comment) {
+                        $comment->delete();
+                    }
+
+                    // 3. Zmaž článok
+                    $post->delete();
+                }
+
+                // 4. Nakoniec zmaž prázdnu kategóriu
+                $category->delete();
+
+            } catch (\Throwable $e) {
+                die("Chyba pri mazaní kategórie: " . $e->getMessage());
+            }
         }
 
         return $this->redirect($this->url('categories.index'));

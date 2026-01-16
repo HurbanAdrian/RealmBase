@@ -8,37 +8,77 @@ use Framework\Http\Responses\Response;
 
 /**
  * Class AdminController
- *
- * This controller manages admin-related actions within the application.It extends the base controller functionality
- * provided by BaseController.
- *
- * @package App\Controllers
+ * Manages admin-related actions: listing and deleting users.
  */
 class AdminController extends BaseController
 {
     /**
-     * Authorizes actions in this controller.
-     *
-     * This method checks if the user is logged in, allowing or denying access to specific actions based
-     * on the authentication state.
-     *
-     * @param  string $action The name of the action to authorize.
-     * @return bool Returns true if the user is logged in; false otherwise.
+     * Overenie práv.
      */
     public function authorize(Request $request, string $action): bool
     {
-        return $this->user->isLoggedIn();
+        $user = $this->app->getAppUser();
+        // Overíme, či user existuje, je prihlásený a je admin
+        if ($user && $user->isLoggedIn() && $user->getRole() === 'admin') {
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Displays the index page of the admin panel.
-     *
-     * This action requires authorization. It returns an HTML response for the admin dashboard or main page.
-     *
-     * @return Response Returns a response object containing the rendered HTML.
+     * Dashboard - zoznam používateľov
      */
     public function index(Request $request): Response
     {
-        return $this->html();
+        // Používame plnú cestu k modelu User
+        $users = \App\Models\User::getAll();
+        return $this->html(['users' => $users], 'index');
+    }
+
+    /**
+     * Zmaže používateľa a VŠETKY jeho dáta
+     */
+    public function deleteUser(Request $request): Response
+    {
+        $id = (int)$request->value('id');
+        $currentUser = $this->app->getAppUser();
+
+        // Admin nemôže zmazať sám seba!
+        if ($id === $currentUser->getId()) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+        $userToDelete = \App\Models\User::getOne($id);
+
+        if ($userToDelete) {
+            try {
+                // 1. Zmažeme všetky KOMENTÁRE tohto používateľa
+                // Používame plnú cestu \App\Models\Comment
+                $userComments = \App\Models\Comment::getAll("user_id = ?", [$id]);
+                foreach ($userComments as $comment) {
+                    $comment->delete();
+                }
+
+                // 2. Zmažeme všetky ČLÁNKY tohto používateľa
+                $userPosts = \App\Models\Post::getAll("user_id = ?", [$id]);
+                foreach ($userPosts as $post) {
+                    // Najprv zmažeme komentáre k článku
+                    $postComments = \App\Models\Comment::getAll("post_id = ?", [$post->getId()]);
+                    foreach ($postComments as $pc) {
+                        $pc->delete();
+                    }
+                    $post->delete();
+                }
+
+                // 3. Konečne zmažeme USERA
+                $userToDelete->delete();
+
+            } catch (\Throwable $e) {
+                // Vypíšeme chybu, ak sa niečo pokazí
+                die("Chyba pri mazaní: " . $e->getMessage());
+            }
+        }
+
+        return $this->redirect($this->url('admin.index'));
     }
 }

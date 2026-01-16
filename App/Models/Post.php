@@ -12,6 +12,7 @@ class Post extends Model
     protected string $title;
     protected string $content;
     protected ?string $created_at = null;
+    protected ?string $image = null;
 
     public function getId()
     {
@@ -69,5 +70,15 @@ class Post extends Model
     public function getCategory(): ?Category
     {
         return Category::getOne($this->category_id);
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
     }
 }

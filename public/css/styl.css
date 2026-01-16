@@ -291,3 +291,23 @@ td {
         padding: 25px;
     }
 }
+
+/* ======================== */
+/* POST IMAGES (NEW)        */
+/* ======================== */
+
+.post-image {
+    max-height: 600px;
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain; /* Zabezpečí, že sa obrázok nezdeformuje */
+    background-color: rgba(0,0,0,0.1); /* Jemný podklad pre priehľadné PNG */
+}
+
+/* Úprava pre náhľady v editácii */
+.img-thumbnail {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444 !important;
+}

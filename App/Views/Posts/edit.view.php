@@ -26,7 +26,7 @@ $user_id = $user_id ?? $post->getUserId();
         </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= $link->url('posts.edit', ['id' => $post->getId()]) ?>">
+    <form method="post" action="<?= $link->url('posts.edit', ['id' => $post->getId()]) ?>" enctype="multipart/form-data">
 
         <div class="mb-3">
             <label for="title" class="form-label">Nadpis článku</label>
@@ -53,6 +53,14 @@ $user_id = $user_id ?? $post->getUserId();
                     </option>
                 <?php endforeach; ?>
             </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label d-block">Aktuálny obrázok:</label>
+            <?php if ($post->getImage()): ?>
+                <img src="public/uploads/<?= $post->getImage() ?>" class="img-thumbnail mb-2" style="height: 100px;">
+            <?php endif; ?>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
         </div>
 
         <div class="mb-3">

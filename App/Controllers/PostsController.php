@@ -16,15 +16,40 @@ class PostsController extends BaseController
      */
     public function index(Request $request): Response
     {
-        $categoryId = (int)$request->value('category');
+        // 1. Získanie parametrov z URL
+        // Skúsime získať kategóriu z rôznych zdrojov, ktoré framework používa
+        $categoryId = (int) ($request->value('category') ?? $_GET['category'] ?? 0);
+        $sortBy = $request->value('sort') ?? 'created_at'; // Predvolené: dátum
+        $order = strtoupper($request->value('order') ?? 'DESC');      // Predvolené: najnovšie && Prevod na veľké písmená
 
-        if ($categoryId > 0) {
-            $posts = Post::getAll("category_id = ?", [$categoryId]);
-        } else {
-            $posts = Post::getAll();
+        // 2. Bezpečnostná kontrola (Whitelist), aby niekto nepodstrčil zlý SQL príkaz
+        $allowedFields = ['id', 'title', 'category_id', 'created_at'];
+        if (!in_array($sortBy, $allowedFields)) {
+            $sortBy = 'created_at';
         }
 
-        return $this->html(['posts' => $posts], 'index');
+        // Povolené len ASC (A-Z / Najstaršie) alebo DESC (Z-A / Najnovšie)
+        if (!in_array($order, ['ASC', 'DESC'])) {
+            $order = 'DESC';
+        }
+
+        // 3. Logika výberu dát
+        $orderByString = "$sortBy $order";
+
+        if ($categoryId > 0) {
+            // getAll(podmienka, parametre, zoradenie)
+            $posts = Post::getAll("category_id = ?", [$categoryId], $orderByString);
+        } else {
+            // getAll(null, prázdne pole, zoradenie)
+            $posts = Post::getAll(null, [], $orderByString);
+        }
+
+        return $this->html([
+            'posts' => $posts,
+            'currentSort' => $sortBy,
+            'currentOrder' => $order,
+            'currentCategory' => $categoryId
+        ], 'index');
     }
 
     /**
@@ -95,6 +120,12 @@ class PostsController extends BaseController
                     $post->setUserId($user->getId());
                 }
 
+                // SPRACUJEME OBRÁZOK
+                $imageName = $this->handleImageUpload($request);
+                if ($imageName) {
+                    $post->setImage($imageName);
+                }
+
                 $post->save();
                 return $this->redirect($this->url('posts.index'));
             }
@@ -156,6 +187,17 @@ class PostsController extends BaseController
                 $post->setTitle($title);
                 $post->setContent($content);
                 $post->setCategoryId($categoryId);
+
+                // --- OBRÁZOK PRI EDITE ---
+                $newImage = $this->handleImageUpload($request);
+                if ($newImage) {
+                    // Ak už mal starý obrázok, zmažeme ho z disku (upratovanie)
+                    if ($post->getImage() && file_exists('public/uploads/' . $post->getImage())) {
+                        unlink('public/uploads/' . $post->getImage());
+                    }
+                    $post->setImage($newImage);
+                }
+
                 $post->save();
 
                 return $this->redirect($this->url('posts.index'));
@@ -205,5 +247,39 @@ class PostsController extends BaseController
         }
 
         return $this->redirect($this->url('posts.index'));
+    }
+
+
+    private function handleImageUpload(Request $request): ?string
+    {
+        // Skontrolujeme, či bol súbor vôbec odoslaný a či nie je chyba
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+
+            // --- PRIDANÁ KONTROLA VEĽKOSTI (2MB = 2 * 1024 * 1024 bajtov) ---
+            if ($_FILES['image']['size'] > 2097152) {
+                return null; // Súbor je príliš veľký, ignorujeme ho
+            }
+
+            $uploadDir = 'public/uploads/';
+
+            // Ak priečinok neexistuje, vytvoríme ho
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            // Získame príponu a vytvoríme unikátny názov (ochrana pred prepísaním)
+            $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $fileName = time() . '_' . uniqid() . '.' . $extension;
+            $targetFile = $uploadDir . $fileName;
+
+            // Validácia typu (iba obrázky)
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            if (in_array(strtolower($extension), $allowedTypes)) {
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+                    return $fileName; // Vrátime názov súboru, ktorý uložíme do DB
+                }
+            }
+        }
+        return null;
     }
 }

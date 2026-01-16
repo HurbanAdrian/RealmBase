@@ -23,7 +23,7 @@ $link = $this->app->getLinkGenerator();
         </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= $link->url('posts.add') ?>">
+    <form method="post" action="<?= $link->url('posts.add') ?>" enctype="multipart/form-data">
 
         <div class="mb-3">
             <label for="title" class="form-label">Nadpis článku</label>
@@ -57,11 +57,16 @@ $link = $this->app->getLinkGenerator();
         <?php endif; ?>
 
         <div class="mb-3">
+            <label for="image" class="form-label">Titulný obrázok (voliteľné):</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
             <label for="content" class="form-label">Obsah</label>
             <textarea name="content" id="content" rows="10" class="form-control" required><?= htmlspecialchars($content ?? '') ?></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Uložiť článok</button>
+        <button type="submit" name="submit" class="btn btn-primary">Uložiť článok</button>
         <a href="<?= $link->url('posts.index') ?>" class="btn btn-secondary">Zrušiť</a>
     </form>
 </div>

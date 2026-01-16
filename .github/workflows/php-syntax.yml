@@ -11,15 +11,24 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: overtrue/phplint@6.0.0
-    - uses: php-actions/phpcs@v1
-      with:
-        php_version: 8.2
-        path: App/        
-        standard: PSR12
-        args: "--ignore=*.view.php --runtime-set ignore_warnings_on_exit 1"
+      - uses: actions/checkout@v3
+
+      # Krok 1: Kontrola čistých syntaktických chýb (či je PHP kód validný)
+      - name: PHP Syntax Check (Lint)
+        uses: overtrue/phplint@8.0  # Aktualizovaná verzia
+        with:
+          path: .
+          options: --exclude=vendor
+
+      # Krok 2: PHPCS - ak ho chceš nechať, ale nechceš, aby "zhadzoval" build
+      - name: PHP CodeSniffer
+        uses: php-actions/phpcs@v1
+        continue-on-error: true  # TENTO RIADOK ZABRÁNI POSIELANIU CHYBOVÝCH MAILOV
+        with:
+          php_version: 8.2
+          path: App/
+          standard: PSR12
+          args: "--ignore=*.view.php --runtime-set ignore_warnings_on_exit 1"

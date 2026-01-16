@@ -2,6 +2,10 @@
 /** @var array $posts */
 /** @var \App\Models\Post $post */
 /** @var \Framework\Core\App $this */
+$currentCategory = $data['currentCategory'] ?? $_GET['category'] ?? 0;
+$currentSort = $data['currentSort'] ?? $_GET['sort'] ?? 'created_at';
+$currentOrder = strtoupper($data['currentOrder'] ?? $_GET['order'] ?? 'DESC');
+
 $link = $this->app->getLinkGenerator();
 $user = $this->app->getAppUser(); // Prihlásený užívateľ
 ?>
@@ -17,6 +21,32 @@ $user = $this->app->getAppUser(); // Prihlásený užívateľ
 
     <div class="mb-3">
         <input type="text" id="tableSearch" class="form-control w-100" placeholder="🔍 Hľadať článok...">
+    </div>
+
+    <div class="mb-3 d-flex gap-2 align-items-center">
+        <span class="text-muted">Zoradiť:</span>
+
+        <div class="btn-group">
+            <a href="<?= $link->url('posts.index', ['category' => $currentCategory, 'sort' => 'created_at', 'order' => 'DESC']) ?>"
+               class="btn btn-sm <?= ($currentSort == 'created_at' && $currentOrder == 'DESC') ? 'btn-warning' : 'btn-outline-warning' ?>">
+                Najnovšie
+            </a>
+            <a href="<?= $link->url('posts.index', ['category' => $currentCategory, 'sort' => 'created_at', 'order' => 'ASC']) ?>"
+               class="btn btn-sm <?= ($currentSort == 'created_at' && $currentOrder == 'ASC') ? 'btn-warning' : 'btn-outline-warning' ?>">
+                Najstaršie
+            </a>
+        </div>
+
+        <div class="btn-group">
+            <a href="<?= $link->url('posts.index', ['category' => $currentCategory, 'sort' => 'title', 'order' => 'ASC']) ?>"
+               class="btn btn-sm <?= ($currentSort == 'title' && $currentOrder == 'ASC') ? 'btn-warning' : 'btn-outline-warning' ?>">
+                A-Z
+            </a>
+            <a href="<?= $link->url('posts.index', ['category' => $currentCategory, 'sort' => 'title', 'order' => 'DESC']) ?>"
+               class="btn btn-sm <?= ($currentSort == 'title' && $currentOrder == 'DESC') ? 'btn-warning' : 'btn-outline-warning' ?>">
+                Z-A
+            </a>
+        </div>
     </div>
 
     <div class="table-responsive">

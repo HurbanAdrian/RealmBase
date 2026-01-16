@@ -22,6 +22,13 @@ if (!isset($user)) {
     <div class="card mb-4">
         <div class="card-body">
             <h1 class="card-title"><?= htmlspecialchars($post->getTitle()) ?></h1>
+
+            <?php if ($post->getImage()): ?>
+                <img src="public/uploads/<?= $post->getImage() ?>"
+                     class="img-fluid my-3 rounded shadow-sm post-image"
+                     alt="Titulka">
+            <?php endif; ?>
+
             <h6 class="card-subtitle mb-2 text-muted">
                 Autor: <?= htmlspecialchars($post->getAuthor()?->getUsername() ?? 'Neznámy') ?> |
                 <?= date("d.m.Y H:i", strtotime($post->getCreatedAt())) ?>

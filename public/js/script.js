@@ -100,6 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const passInput = document.querySelector("input[name='password']");
             const passVerifyInput = document.querySelector("input[name='password_verify']");
 
+            // --- D) KONTROLA VEĽKOSTI OBRÁZKA (max 2MB) ---
+            const imageInput = document.querySelector("input[name='image']");
+            if (imageInput && imageInput.files.length > 0) {
+                const fileSize = imageInput.files[0].size / 1024 / 1024; // Prevod na MB
+                if (fileSize > 2) {
+                    errors.push("Obrázok je príliš veľký (max 2MB).");
+                    errorInputs.push(imageInput);
+                }
+            }
+
             // 1. Username
             if (usernameInput) {
                 const val = usernameInput.value.trim();

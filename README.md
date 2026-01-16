@@ -1,112 +1,75 @@
-# 🌐 RealmBase — VAII Semester Project
-Moderná MVC webová aplikácia vytvorená ako semestrálny projekt pre predmet  
-**Vývoj intranetových a internetových aplikácií (VAII)** na  
-[FRI UNIZA](https://www.fri.uniza.sk/).
+# RealmBase - Portál pre správu článkov
 
-RealmBase je komunitná platforma umožňujúca spravovať kategórie a príspevky (CRUD),  
-s užívateľskými účtami, validáciou a vlastným responzívnym dizajnom.
+Semestrálna práca z predmetu VAII (2025/26). Aplikácia slúži na publikovanie článkov, ich kategorizáciu a diskusiu prostredníctvom komentárov. Projekt implementuje architektúru MVC a moderné webové technológie.
 
----
+## 🚀 Rýchle nasadenie (Docker)
 
-## 📌 Obsah
-- [✨ Funkcionalita](#-funkcionalita)
-- [🧱 Použitý Framework](#-použitý-framework)
-- [🐳 Docker Inštalácia](#-docker-inštalácia)
-- [📂 Štruktúra projektu](#-štruktúra-projektu)
-- [🔧 Technológie](#-technológie)
-- [📘 Dokumentácia](#-dokumentácia)
-- [👤 Autor](#-autor)
+Aplikácia je plne dockerizovaná, čo umožňuje jej okamžité spustenie bez nutnosti manuálnej inštalácie PHP alebo MySQL.
 
----
+1. Uistite sa, že máte nainštalovaný **Docker Desktop**.
+2. V koreňovom priečinku projektu spustite príkaz:
+   ```bash
+   docker-compose up -d
 
-## ✨ Funkcionalita
+    Aplikácia bude dostupná na adrese: http://localhost
 
-### ✔ Kompletné CRUD operácie
-- Správa **kategórií**
-- Správa **príspevkov**
-- Admin UI + formuláre + tabuľky + validácie
+    Databázový nástroj (Adminer) je dostupný na: http://localhost:8080 (Server: db)
 
-### ✔ Používateľský systém
-- Prihlásenie / odhlásenie
-- Autentifikácia (SessionAuthenticator)
-- Ochrana administrácie
+Poznámka: Databáza sa automaticky inicializuje zo súborov v priečinku ./sql pri prvom štarte.
+🔑 Testovacie údaje
 
-### ✔ Validácia vstupov
-- **Client-side** validácia cez JavaScript
-- **Server-side** validácia v controlleroch
-- Zobrazovanie chýb vo view
+Pre potreby obhajoby a testovanie autorizácie sú v systéme predvytvorené nasledujúce účty (heslá sú bezpečne hashované):
+Rola	Login (Username)	Heslo	E-mail
+Administrátor	adminMe	admin123	admin@example.com
+Používateľ	userMe	user123	user@example.com
+✨ Implementované kľúčové funkcie
 
-### ✔ Netriviálny JavaScript
-- Live search filter v tabuľkách
-- Validácia formulárov
-- Dynamické skrývanie/odkrývanie prvkov
+    Správa obsahu (CRUD): Kompletné vytváranie, čítanie, úprava a mazanie článkov.
 
-### ✔ Responzívny dizajn
-- Mobilné menu (hamburger)
-- Prispôsobené karty + sekcie
-- Optimalizované CSS pre malé displeje
+    Kategorizácia: Články sú delené do tematických okruhov: Novinky, Bugy a Fixy, Tipy a Triky, Aktualizácie.
 
-### ✔ Vlastný moderný dizajn
-- Dark mode
-- Animácie
-- Zaoblené komponenty
-- Custom scrollbar
+    Dynamické zoradenie: Možnosť triediť články podľa dátumu vytvorenia alebo názvu (vzostupne aj zostupne) so zachovaním filtra kategórie.
 
----
+    Komentáre (AJAX): Asynchrónne pridávanie a mazanie komentárov bez potreby obnovenia stránky.
 
-## 🧱 Použitý Framework
+    Práca so súbormi: Podpora pre nahrávanie titulných obrázkov (upload) k článkom s automatickým premazávaním starých súborov pri editácii/zmazaní.
 
-Projekt je postavený na školskom MVC frameworku **VAIICko**, ktorý slúži  
-na výučbu architektúry MVC v predmete VAII.
+    Bezpečnosť: Ošetrenie vstupov (XSS ochrana), ochrana proti SQL Injection (Prepared Statements) a autorizácia na úrovni rolí (Admin vs. User).
 
-➡️ Originál frameworku:  
-https://github.com/thevajko/vaiicko
+    Responzívny dizajn: Vlastný Dark Mode (RealmBase) prispôsobený pre mobilné zariadenia a desktopy.
 
-Framework obsahuje:
-- MVC architektúru
-- routing
-- automatické načítanie controllerov a view
-- modelový layer s PDO
-- session manažment
-- response/render systém
+🛠 Použité technológie
+
+    Backend: PHP 8.2 (MVC Framework Vaííčko)
+
+    Frontend: Vanilla JavaScript (AJAX, validácie), Bootstrap 5, vlastné CSS
+
+    Databáza: MariaDB (MySQL)
+
+    Infraštruktúra: Docker & Docker Compose
+
+📁 Štruktúra databázy
+
+Aplikácia využíva 5 hlavných entít:
+
+    users (správa používateľov a rolí)
+
+    categories (správa tematických okruhov)
+
+    posts (samotné články s prepojením na autora a kategóriu)
+
+    comments (diskusia k článkom)
+
+    logs (záznamy o systémových akciách)
+
+Vytvorené v rámci predmetu Vývoj aplikácií pre internet a intranet.
+
 
 ---
 
-## 🐳 Docker Inštalácia
-
-Projekt obsahuje pripravenú docker konfiguráciu v priečinku `docker/`.
-
-### 💻 Spustenie projektu
-```bash
-docker compose up --build
-```
-Dostupné služby:
-Služba	Adresa	Popis
-Web aplikácia	http://localhost/
-Apache + PHP 8.3
-Adminer	http://localhost:8080/
-Správa databázy
-MariaDB	localhost:3306	Databázový server
-Ďalšie informácie
-
-Document root je public/
-
-Xdebug beží na porte 9003
-
-PDO je súčasťou PHP kontajnera
-
-Prihlásenie do DB je v .env
-
-🔧 Technológie
-    PHP 8.3,
-    Bootstrap 5,
-    JavaScript (ES6),
-    MariaDB,
-    Docker,
-    MVC architektúra
-
-👤 Autor
-Adrian Hurban
-Semester Project – RealmBase
-Predmet: VAII – Vývoj intranetových a internetových aplikácií
-Fakulta riadenia a informatiky, UNIZA
+### Čo si teraz skontrolovať?
+1. **Súbor `database.sql` (v priečinku `./sql`):** Uisti sa, že obsahuje tvoje `CREATE TABLE` príkazy a tie `INSERT` príkazy s `adminMe` a `userMe`.
+2. **Docker premazanie:** Ak si už Docker spúšťal predtým, nezabudni ho "reštartovať načisto", aby sa načítali tieto nové dáta:
+   ```bash
+   docker-compose down -v
+   docker-compose up -d

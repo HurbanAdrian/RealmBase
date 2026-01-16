@@ -22,6 +22,7 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
     <link rel="shortcut icon" href="<?= $link->asset('favicons/RB_logo.png') ?>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -29,7 +30,7 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
             <img src="<?= $link->asset('images/RB_logo.png') ?>" height="32">

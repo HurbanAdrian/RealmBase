@@ -18,6 +18,7 @@ CREATE TABLE posts (
                        category_id INT,
                        title VARCHAR(200) NOT NULL,
                        content TEXT NOT NULL,
+                       image VARCHAR(255) NULL,
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                        FOREIGN KEY (user_id) REFERENCES users(id),
                        FOREIGN KEY (category_id) REFERENCES categories(id)
@@ -40,3 +41,16 @@ CREATE TABLE logs (
                       timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                       FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Vloženie kategórií šitých na mieru pre RealmBase
+INSERT INTO categories (name, description) VALUES
+                                               ('Novinky', 'Horúce aktuality z herného sveta a vývoja.'),
+                                               ('Bugy a Fixy', 'Hlásenia o chybách a informácie o opravách systému.'),
+                                               ('Tipy a Triky', 'Návody a odporúčania pre lepšie hranie a používanie portálu.'),
+                                               ('Aktualizácie', 'Zoznam zmien a nových verzií aplikácie.');
+
+-- Vloženie testovacích používateľov s tvojimi vlastnými hashmi
+-- admin123 (admin) a user123 (user)
+INSERT INTO users (username, email, password, role) VALUES
+                                                        ('adminMe', 'admin@example.com', '$2y$12$k3KcFTCxAfrvKReItpfelO7VruLiJhBnWGXjqiFsIZQLeqG/HnEZq', 'admin'),
+                                                        ('userMe', 'user@example.com', '$2y$10$dVi.S7pMLBhTcfIH.DovYuZsXks/CureemqUfMoLCNx1Ovc7Fgr.u', 'user');

@@ -2,11 +2,10 @@
 /** @var \App\Models\Post $post */
 /** @var array $comments */
 /** @var \Framework\Core\App $this */
-/** @var \Framework\Auth\AppUser $user */ // Framework ho sem posiela automaticky
+/** @var \Framework\Auth\AppUser $user */
 
 $link = $this->app->getLinkGenerator();
 
-// OPRAVA: Nepoužívame getAuth(), ale getAppUser() ak by náhodou $user nebol definovaný
 if (!isset($user)) {
     $user = $this->app->getAppUser();
 }
@@ -41,18 +40,29 @@ if (!isset($user)) {
             <?php foreach ($comments as $comment): ?>
                 <div class="card mb-2" id="comment-<?= $comment->getId() ?>">
                     <div class="card-body py-2 d-flex justify-content-between align-items-start">
-                        <div>
+
+                        <div class="w-100">
                             <strong><?= htmlspecialchars($comment->getAuthor()?->getUsername() ?? 'Neznámy') ?></strong>
                             <small class="text-muted ms-2"><?= date("d.m.Y H:i", strtotime($comment->getCreatedAt())) ?></small>
-                            <p class="mb-0 mt-1"><?= htmlspecialchars($comment->getContent()) ?></p>
+
+                            <p class="mb-0 mt-1 comment-text" id="comment-text-<?= $comment->getId() ?>">
+                                <?= htmlspecialchars($comment->getContent()) ?>
+                            </p>
                         </div>
 
                         <?php if ($user->isLoggedIn() && ($user->getId() === $comment->getUserId() || $user->getRole() === 'admin')): ?>
-                            <button class="btn btn-sm btn-outline-danger btn-delete-comment"
-                                    data-id="<?= $comment->getId() ?>">
-                                ×
-                            </button>
-                        <?php endif; ?>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-outline-warning btn-edit-comment"
+                                        data-id="<?= $comment->getId() ?>">
+                                    ✏️
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-danger btn-delete-comment"
+                                        data-id="<?= $comment->getId() ?>">
+                                    ×
+                                </button>
+                            </div> <?php endif; ?>
+
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -66,7 +76,7 @@ if (!isset($user)) {
                         <input type="hidden" name="post_id" value="<?= $post->getId() ?>">
 
                         <div class="mb-3">
-                            <textarea name="content" class="form-control" rows="3" placeholder="Napíš niečo..." required></textarea>
+                            <textarea name="content" class="form-control" rows="3" placeholder="Napíš niečo..." required maxlength="1000"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Odoslať komentár</button>
                     </form>

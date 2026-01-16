@@ -15,6 +15,10 @@ $user = $this->app->getAppUser(); // Prihlásený užívateľ
         <?php endif; ?>
     </div>
 
+    <div class="mb-3">
+        <input type="text" id="tableSearch" class="form-control w-100" placeholder="🔍 Hľadať článok...">
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>

@@ -17,6 +17,10 @@ $isAdmin = ($user && $user->isLoggedIn() && $user->getRole() === 'admin');
         <?php endif; ?>
     </div>
 
+    <div class="mb-3">
+        <input type="text" id="tableSearch" class="form-control w-100" placeholder="🔍 Rýchle hľadanie kategórie...">
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>

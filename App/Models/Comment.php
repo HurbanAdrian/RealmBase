@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Framework\Core\Model;
+use App\Models\User;
 
 class Comment extends Model
 {

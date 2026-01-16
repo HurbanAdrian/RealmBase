@@ -12,34 +12,33 @@ use Framework\Http\Responses\Response;
 class PostsController extends BaseController
 {
     /**
-     * Zobrazí zoznam článkov (všetky alebo filtrované podľa kategórie)
+     * Zobrazí zoznam článkov
      */
     public function index(Request $request): Response
     {
-        // 1. Zistíme, či chceme filtrovať podľa kategórie (?category=5)
         $categoryId = (int)$request->value('category');
 
         if ($categoryId > 0) {
-            // Načítame len články z danej kategórie
             $posts = Post::getAll("category_id = ?", [$categoryId]);
         } else {
-            // Načítame všetky
             $posts = Post::getAll();
         }
 
         return $this->html(['posts' => $posts], 'index');
     }
 
+    /**
+     * Zobrazí detail článku
+     */
     public function show(Request $request): Response
     {
-        $id = $request->value('id');
+        $id = (int)$request->value('id'); // Pretypovanie na int pre istotu
         $post = Post::getOne($id);
 
         if (!$post) {
             return $this->redirect($this->url('posts.index'));
         }
 
-        // Načítame komentáre k článku
         $comments = \App\Models\Comment::getAll("post_id = ?", [$id]);
 
         return $this->html([
@@ -48,6 +47,9 @@ class PostsController extends BaseController
         ], 'show');
     }
 
+    /**
+     * Pridanie článku
+     */
     public function add(Request $request): Response
     {
         $user = $this->app->getAppUser();
@@ -56,30 +58,39 @@ class PostsController extends BaseController
         }
 
         $categories = Category::getAll();
-        // Pre výber autora (len pre admina, inak sa nastaví aktuálny user)
         $users = User::getAll();
 
-        $title = $request->post('title');
-        $content = $request->post('content');
-        $categoryId = $request->post('category_id');
-        $userId = $request->post('user_id');
+        // Získame dáta a ošetríme medzery
+        $title = trim($request->post('title') ?? '');
+        $content = trim($request->post('content') ?? '');
+        $categoryId = (int)$request->post('category_id');
+        $userId = (int)$request->post('user_id');
 
         $errors = [];
 
         if ($request->isPost()) {
-            if (strlen($title) < 3) $errors[] = "Nadpis je príliš krátky";
-            if (strlen($content) < 10) $errors[] = "Obsah je príliš krátky";
-            if (empty($categoryId)) $errors[] = "Vyberte kategóriu";
+            // --- VALIDÁCIA ---
+            // 1. Min. dĺžka
+            if (mb_strlen($title) < 3) $errors[] = "Nadpis je príliš krátky (min. 3 znaky).";
+            if (mb_strlen($content) < 10) $errors[] = "Obsah je príliš krátky (min. 10 znakov).";
+
+            // 2. Max. dĺžka (Ochrana databázy)
+            if (mb_strlen($title) > 255) $errors[] = "Nadpis je príliš dlhý (max. 255 znakov).";
+            // Obsah v DB je asi TEXT (65k), ale dajme rozumný limit pre web
+            if (mb_strlen($content) > 20000) $errors[] = "Obsah je príliš dlhý.";
+
+            // 3. Povinné polia
+            if ($categoryId <= 0) $errors[] = "Vyberte kategóriu.";
 
             if (empty($errors)) {
                 $post = new Post();
                 $post->setTitle($title);
                 $post->setContent($content);
-                $post->setCategoryId((int)$categoryId);
+                $post->setCategoryId($categoryId);
 
-                // Ak je admin a vybral iného autora, použijeme to. Inak aktuálny user.
-                if ($user->getRole() === 'admin' && !empty($userId)) {
-                    $post->setUserId((int)$userId);
+                // Admin môže nastaviť autora, inak je to aktuálny user
+                if ($user->getRole() === 'admin' && $userId > 0) {
+                    $post->setUserId($userId);
                 } else {
                     $post->setUserId($user->getId());
                 }
@@ -100,6 +111,9 @@ class PostsController extends BaseController
         ], 'add');
     }
 
+    /**
+     * Editácia článku
+     */
     public function edit(Request $request): Response
     {
         $id = (int)$request->value('id');
@@ -116,7 +130,6 @@ class PostsController extends BaseController
         }
 
         if ($post->getUserId() !== $user->getId() && $user->getRole() !== 'admin') {
-            // Nemáš právo -> presmerujeme
             return $this->redirect($this->url('posts.index'));
         }
 
@@ -125,17 +138,24 @@ class PostsController extends BaseController
         $errors = [];
 
         if ($request->isPost()) {
-            $title = $request->post('title');
-            $content = $request->post('content');
-            $categoryId = $request->post('category_id');
+            $title = trim($request->post('title') ?? '');
+            $content = trim($request->post('content') ?? '');
+            $categoryId = (int)$request->post('category_id');
 
-            if (strlen($title) < 3) $errors[] = "Nadpis je príliš krátky";
-            if (strlen($content) < 10) $errors[] = "Obsah je príliš krátky";
+            // --- VALIDÁCIA ---
+            if (mb_strlen($title) < 3) $errors[] = "Nadpis je príliš krátky (min. 3 znaky).";
+            if (mb_strlen($content) < 10) $errors[] = "Obsah je príliš krátky (min. 10 znakov).";
+
+            // Ochrana DB
+            if (mb_strlen($title) > 255) $errors[] = "Nadpis je príliš dlhý (max. 255 znakov).";
+            if (mb_strlen($content) > 20000) $errors[] = "Obsah je príliš dlhý.";
+
+            if ($categoryId <= 0) $errors[] = "Vyberte kategóriu.";
 
             if (empty($errors)) {
                 $post->setTitle($title);
                 $post->setContent($content);
-                $post->setCategoryId((int)$categoryId);
+                $post->setCategoryId($categoryId);
                 $post->save();
 
                 return $this->redirect($this->url('posts.index'));
@@ -150,6 +170,9 @@ class PostsController extends BaseController
         ], 'edit');
     }
 
+    /**
+     * Zmazanie článku
+     */
     public function delete(Request $request): Response
     {
         $id = (int)$request->value('id');
@@ -162,18 +185,19 @@ class PostsController extends BaseController
                 if ($post->getUserId() === $user->getId() || $user->getRole() === 'admin') {
 
                     try {
-                        // 1. Najprv zmažeme všetky komentáre k tomuto článku
+                        // 1. Zmažeme komentáre
                         $comments = \App\Models\Comment::getAll("post_id = ?", [$post->getId()]);
                         foreach ($comments as $comment) {
                             $comment->delete();
                         }
 
-                        // 2. Potom zmažeme samotný článok
+                        // 2. Zmažeme článok
                         $post->delete();
 
                     } catch (\Throwable $e) {
-                        // Ak by nastala chyba, vypíšeme ju (alebo len logujeme)
-                        die("Nepodarilo sa zmazať článok: " . $e->getMessage());
+                        // V reálnej appke by sme to logovali do súboru
+                        // Tu aspoň zabránime pádu a presmerujeme späť
+                        // Ak by si mal FlashMessages, tu by si poslal chybu
                     }
 
                 }

@@ -30,7 +30,6 @@ class AdminController extends BaseController
      */
     public function index(Request $request): Response
     {
-        // Používame plnú cestu k modelu User
         $users = \App\Models\User::getAll();
         return $this->html(['users' => $users], 'index');
     }
@@ -53,7 +52,6 @@ class AdminController extends BaseController
         if ($userToDelete) {
             try {
                 // 1. Zmažeme všetky KOMENTÁRE tohto používateľa
-                // Používame plnú cestu \App\Models\Comment
                 $userComments = \App\Models\Comment::getAll("user_id = ?", [$id]);
                 foreach ($userComments as $comment) {
                     $comment->delete();
@@ -74,8 +72,9 @@ class AdminController extends BaseController
                 $userToDelete->delete();
 
             } catch (\Throwable $e) {
-                // Vypíšeme chybu, ak sa niečo pokazí
-                die("Chyba pri mazaní: " . $e->getMessage());
+                // V prípade chyby len presmerujeme späť, nezobrazíme bielu obrazovku s chybou
+                // (V reálnej appke by sa chyba zapísala do logu)
+                return $this->redirect($this->url('admin.index'));
             }
         }
 

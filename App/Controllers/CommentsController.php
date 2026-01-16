@@ -40,6 +40,10 @@ class CommentsController extends BaseController
             return new JsonResponse(['status' => 'error', 'message' => 'Komentár je príliš krátky'], 400);
         }
 
+        // --- NOVÁ KONTROLA ---
+        if (mb_strlen($content) > 1000) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Komentár je príliš dlhý (maximum je 1000 znakov).'], 400);
+        }
         try {
             // 4. Uloženie do DB
             $comment = new Comment();
@@ -103,6 +107,60 @@ class CommentsController extends BaseController
             return new JsonResponse(['status' => 'success']);
         } catch (\Throwable $e) {
             return new JsonResponse(['status' => 'error', 'message' => 'Chyba databázy: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Upraví komentár (AJAX)
+     */
+    public function edit(\Framework\Http\Request $request)
+    {
+        try {
+            // 1. Získanie aktuálneho používateľa
+            $currentUser = $this->app->getAppUser();
+
+            // 2. Overenie prihlásenia
+            if (!$currentUser->isLoggedIn()) {
+                throw new \Exception('Musíte byť prihlásený.');
+            }
+
+            // 3. Získanie dát (cez $_POST pre istotu)
+            $id = (int)($_POST['id'] ?? 0);
+            $newContent = trim($_POST['content'] ?? '');
+
+            if ($id <= 0 || empty($newContent)) {
+                throw new \Exception('Chýbajúce dáta (ID alebo obsah).');
+            }
+
+            // --- KONTROLA DĹŽKY ---
+            if (mb_strlen($newContent) > 1000) {
+                throw new \Exception('Komentár je príliš dlhý (maximum je 1000 znakov).');
+            }
+
+            // 4. Nájdenie komentára
+            $comment = \App\Models\Comment::getOne($id);
+
+            if (!$comment) {
+                throw new \Exception('Komentár neexistuje.');
+            }
+
+            // 5. Overenie oprávnení
+            if ($comment->getUserId() !== $currentUser->getId() && $currentUser->getRole() !== 'admin') {
+                throw new \Exception('Nemáte oprávnenie upraviť tento komentár.');
+            }
+
+            // 6. Uloženie
+            $comment->setContent($newContent);
+            $comment->save();
+
+            // 7. Odoslanie JSON odpovede (ZJEDNOTENÉ S OSTATNÝMI METÓDAMI)
+            return new JsonResponse(['status' => 'success']);
+
+        } catch (\Throwable $e) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Chyba: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

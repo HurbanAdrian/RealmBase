@@ -23,13 +23,21 @@ class CategoriesController extends BaseController
             return $this->redirect($this->url('categories.index'));
         }
 
-        $name = $request->post('name');
-        $description = $request->post('description');
+        // Ošetrenie vstupov (trim)
+        $name = trim($request->post('name') ?? '');
+        $description = trim($request->post('description') ?? '');
         $errors = [];
 
         if ($request->isPost()) {
-            if (strlen($name) < 3) {
+            // --- VALIDÁCIA ---
+            if (mb_strlen($name) < 3) {
                 $errors[] = "Názov musí mať aspoň 3 znaky";
+            }
+            if (mb_strlen($name) > 50) { // Ochrana DB (zvyčajne VARCHAR 50)
+                $errors[] = "Názov je príliš dlhý (max 50 znakov)";
+            }
+            if (mb_strlen($description) > 255) { // Ochrana DB
+                $errors[] = "Popis je príliš dlhý (max 255 znakov)";
             }
 
             if (empty($errors)) {
@@ -64,12 +72,24 @@ class CategoriesController extends BaseController
         }
 
         $errors = [];
-        if ($request->isPost()) {
-            $name = $request->post('name');
-            $description = $request->post('description');
+        // Predvyplnenie dát z databázy (ak nie je POST) alebo z formulára (ak je POST a chyba)
+        // Toto zabezpečí, že premenné $name a $description sú vždy definované pre View
+        $name = $category->getName();
+        $description = $category->getDescription();
 
-            if (strlen($name) < 3) {
+        if ($request->isPost()) {
+            $name = trim($request->post('name') ?? '');
+            $description = trim($request->post('description') ?? '');
+
+            // --- VALIDÁCIA ---
+            if (mb_strlen($name) < 3) {
                 $errors[] = "Názov musí mať aspoň 3 znaky";
+            }
+            if (mb_strlen($name) > 50) {
+                $errors[] = "Názov je príliš dlhý (max 50 znakov)";
+            }
+            if (mb_strlen($description) > 255) {
+                $errors[] = "Popis je príliš dlhý (max 255 znakov)";
             }
 
             if (empty($errors)) {
@@ -80,7 +100,13 @@ class CategoriesController extends BaseController
             }
         }
 
-        return $this->html(['category' => $category, 'errors' => $errors], 'edit');
+        // Posielame dáta do View
+        return $this->html([
+            'category' => $category,
+            'errors' => $errors,
+            'name' => $name,             // Dôležité pre zachovanie hodnoty pri chybe
+            'description' => $description // Dôležité pre zachovanie hodnoty pri chybe
+        ], 'edit');
     }
 
     public function delete(Request $request): Response
@@ -116,7 +142,9 @@ class CategoriesController extends BaseController
                 $category->delete();
 
             } catch (\Throwable $e) {
-                die("Chyba pri mazaní kategórie: " . $e->getMessage());
+                // Nikdy nepoužívaj die() v produkčnom kóde, radšej redirect
+                // (V reálnej appke by si tu zalogoval chybu alebo poslal FlashMessage)
+                return $this->redirect($this->url('categories.index'));
             }
         }
 

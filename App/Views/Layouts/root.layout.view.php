@@ -16,10 +16,10 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= App\Configuration::APP_NAME ?></title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/favicon-32x32.png') ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/favicon-16x16.png') ?>">
-    <link rel="shortcut icon" href="<?= $link->asset('favicons/favicon.ico') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/RB_logoApple.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/RB_logo32.png') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/RB_logo16.png') ?>">
+    <link rel="shortcut icon" href="<?= $link->asset('favicons/RB_logo.png') ?>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
@@ -32,7 +32,7 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
-            <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" height="32">
+            <img src="<?= $link->asset('images/RB_logo.png') ?>" height="32">
             REALMBASE
         </a>
 

@@ -11,11 +11,6 @@ use Framework\Http\Responses\ViewResponse;
 
 /**
  * Class AuthController
- *
- * This controller handles authentication actions such as login, logout, and redirection to the login page. It manages
- * user sessions and interactions with the authentication system.
- *
- * @package App\Controllers
  */
 class AuthController extends BaseController
 {
@@ -34,15 +29,18 @@ class AuthController extends BaseController
     {
         $logged = null;
         if ($request->hasValue('submit')) {
-            $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
+            // Trimujeme username (užívatelia často omylom skopírujú medzeru)
+            $username = trim($request->value('username') ?? '');
+            $password = $request->value('password'); // Heslo netrimujeme, medzera môže byť súčasťou hesla
+
+            $logged = $this->app->getAuthenticator()->login($username, $password);
+
             if ($logged) {
-                // Po úspešnom prihlásení presmerujeme.
-                // Ak chceš, aby bežní useri nešli na admin stránku, môžeš to zmeniť na 'home.index'
                 return $this->redirect($this->url("home.index"));
             }
         }
 
-        $message = $logged === false ? 'Bad username or password' : null;
+        $message = $logged === false ? 'Nesprávne používateľské meno alebo heslo' : null;
         return $this->html(compact("message"));
     }
 
@@ -52,7 +50,6 @@ class AuthController extends BaseController
     public function logout(Request $request): Response
     {
         $this->app->getAuthenticator()->logout();
-        // Po odhlásení presmerujeme na login alebo domov
         return $this->redirect($this->url('home.index'));
     }
 
@@ -64,9 +61,7 @@ class AuthController extends BaseController
         $data = [];
         $errors = [];
 
-        // OPRAVA: Používame premennú $request, ktorá prišla ako parameter, nie $this->request()
-        // Poznámka: Ak tvoj framework nemá metódu isPost(), použi: $request->server('REQUEST_METHOD') === 'POST'
-        // Alebo skontroluj či bol odoslaný formulár
+        // Zistenie, či ide o POST request
         $isPost = false;
         if (method_exists($request, 'isPost')) {
             $isPost = $request->isPost();
@@ -75,48 +70,78 @@ class AuthController extends BaseController
         }
 
         if ($isPost) {
-            $username = $request->post('username');
-            $email = $request->post('email');
-            $password = $request->post('password');
-            $passwordVerify = $request->post('password_verify');
+            // 1. Získanie a očistenie dát
+            $username = trim($request->post('username') ?? '');
+            $email = trim($request->post('email') ?? '');
+            $password = $request->post('password') ?? ''; // Heslo netrimuj!
+            $passwordVerify = $request->post('password_verify') ?? '';
 
-            // 1. Validácia
-            if (empty($username) || strlen($username) < 3) {
+            // 2. VALIDÁCIA
+
+            // --- Username ---
+            if (mb_strlen($username) < 3) {
                 $errors[] = "Meno musí mať aspoň 3 znaky.";
             }
-            if (empty($password) || strlen($password) < 4) {
+            if (mb_strlen($username) > 50) { // DB limit
+                $errors[] = "Meno je príliš dlhé (max 50 znakov).";
+            }
+
+            // --- Email ---
+            if (empty($email)) {
+                $errors[] = "Zadajte e-mail.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors[] = "Neplatný formát e-mailu.";
+            }
+            if (mb_strlen($email) > 255) { // DB limit
+                $errors[] = "E-mail je príliš dlhý.";
+            }
+
+            // --- Password ---
+            if (mb_strlen($password) < 4) {
                 $errors[] = "Heslo musí mať aspoň 4 znaky.";
             }
             if ($password !== $passwordVerify) {
                 $errors[] = "Heslá sa nezhodujú.";
             }
 
-            // Kontrola, či užívateľ s takým menom už neexistuje
-            $existingUsers = \App\Models\User::getAll();
-            foreach ($existingUsers as $u) {
-                if ($u->getUsername() === $username) {
+            // --- Duplicita (Optimalizované) ---
+            // Skontrolujeme, či už user existuje jedným rýchlym dotazom do DB
+            // Namiesto načítania všetkých userov a cyklenia v PHP
+            if (empty($errors)) {
+                $existingUser = \App\Models\User::getAll("username = ?", [$username]);
+                if (!empty($existingUser)) {
                     $errors[] = "Používateľ s týmto menom už existuje.";
-                    break;
+                }
+
+                // Bonus: Kontrola duplicity emailu
+                $existingEmail = \App\Models\User::getAll("email = ?", [$email]);
+                if (!empty($existingEmail)) {
+                    $errors[] = "Tento e-mail je už registrovaný.";
                 }
             }
 
-            // 2. Ak je všetko OK, vytvoríme usera
+            // 3. Ak je všetko OK, vytvoríme usera
             if (empty($errors)) {
-                $user = new \App\Models\User();
-                $user->setUsername($username);
-                $user->setEmail($email);
+                try {
+                    $user = new \App\Models\User();
+                    $user->setUsername($username);
+                    $user->setEmail($email);
 
-                // Heslo zahashujeme
-                $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+                    // Hashovanie hesla
+                    $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
 
-                $user->setRole('user'); // Bežný user
-                $user->save();
+                    $user->setRole('user');
+                    $user->save();
 
-                // Presmerujeme na login
-                return $this->redirect($this->url('auth.login'));
+                    // Presmerujeme na login
+                    return $this->redirect($this->url('auth.login'));
+
+                } catch (\Throwable $e) {
+                    $errors[] = "Chyba pri registrácii: " . $e->getMessage();
+                }
             }
 
-            // Ak boli chyby, vrátime ich do formulára
+            // Ak boli chyby, vrátime zadané údaje do formulára (okrem hesla!)
             $data['username'] = $username;
             $data['email'] = $email;
         }

@@ -1,5 +1,6 @@
 /* ======================== */
-/*       REALMBASED DARK     */
+/* REALMBASED DARK     */
+/* (High Visibility Version) */
 /* ======================== */
 
 body {
@@ -7,10 +8,42 @@ body {
     color: #e5e5e5;
     font-family: "Inter", "Segoe UI", sans-serif;
     margin: 0;
+    overflow-x: hidden;
 }
 
 /* ======================== */
-/*          NAVBAR          */
+/* VISIBILITY FIXES (NEW)   */
+/* ======================== */
+
+/* 1. Zosvetlenie "muted" textov (Autor, Pätička, Podnadpisy) */
+.text-muted, .card-subtitle, small {
+    color: #d4d4d4 !important; /* Oveľa svetlejšia sivá */
+}
+
+/* 2. Odkazy */
+a {
+    color: #f5c542;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+a:hover {
+    color: #ffdb70;
+}
+
+/* 3. Breadcrumbs (Navigácia: Domov / Články / Názov) */
+.breadcrumb-item a {
+    color: #f5c542 !important; /* Odkazy zlaté */
+}
+.breadcrumb-item.active {
+    color: #ffffff !important; /* Aktuálna stránka biela (nie sivá) */
+    font-weight: 600;
+}
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #999 !important; /* Oddeľovač (lomítko) */
+}
+
+/* ======================== */
+/* NAVBAR          */
 /* ======================== */
 
 .navbar {
@@ -23,7 +56,7 @@ body {
 }
 
 .nav-link {
-    color: #cfcfcf !important;
+    color: #e0e0e0 !important; /* Jasnejšia biela pre menu */
     padding: 10px 16px;
     font-size: 15px;
 }
@@ -32,28 +65,23 @@ body {
 .nav-link.active {
     background: #222 !important;
     border-radius: 6px;
-    color: white !important;
+    color: #f5c542 !important;
 }
 
-/* Hamburger icon brightness */
 .navbar-toggler-icon {
-    filter: brightness(250%);
+    filter: invert(1) brightness(200%);
 }
 
-/* Collapsed mobile menu */
 .navbar-collapse {
     background-color: #111 !important;
     padding: 15px;
     border-radius: 12px;
-}
-
-.navbar-collapse .nav-link:hover {
-    background-color: #222 !important;
-    border-radius: 8px;
+    margin-top: 10px;
+    z-index: 1000;
 }
 
 /* ======================== */
-/*   DEFAULT PAGE CONTENT   */
+/* DEFAULT PAGE CONTENT   */
 /* ======================== */
 
 .web-content {
@@ -61,38 +89,73 @@ body {
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+    border: 1px solid #333;
 }
 
 /* ======================== */
-/*          TABLES          */
+/* CARD FIXES            */
 /* ======================== */
 
-table {
+.card {
+    background-color: #1e1e1e !important;
+    color: #e5e5e5 !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+}
+
+.card-title, h1, h2, h3, h4, h5 {
+    color: #ffffff !important; /* Nadpisy čisto biele */
+}
+
+.card-header, .card-footer {
+    background-color: rgba(0,0,0,0.2) !important;
+    border-color: #333 !important;
+}
+
+/* ======================== */
+/* TABLES          */
+/* ======================== */
+
+.table {
     background-color: #1f1f1f !important;
-    color: #e5e5e5;
+    color: #e5e5e5 !important;
     border-radius: 10px;
+    border-color: #333 !important;
+    --bs-table-bg: #1f1f1f;
+    --bs-table-color: #e5e5e5;
 }
 
 th {
     background-color: #f5c542 !important;
     color: #000 !important;
+    border: none !important;
 }
 
-tr:nth-child(even) {
-    background-color: #2a2a2a !important;
-}
-
-tr:hover {
-    background-color: #333 !important;
-}
-
-/* ======================== */
-/*         FORM INPUTS      */
-/* ======================== */
-
-.form-control {
-    background: #2a2a2a !important;
+td {
+    border-color: #333 !important;
     color: #e5e5e5 !important;
+    vertical-align: middle;
+}
+
+/* Zebra efekt - svetlejší pre čitateľnosť */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #2a2a2a !important;
+    color: #e5e5e5 !important;
+    box-shadow: none !important;
+}
+
+.table-hover > tbody > tr:hover > * {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+/* ======================== */
+/* FORM INPUTS      */
+/* ======================== */
+
+.form-control, .form-select {
+    background: #2a2a2a !important;
+    color: #fff !important; /* Biely text v inputoch */
     border-radius: 8px !important;
     border: 1px solid #444 !important;
 }
@@ -102,31 +165,38 @@ tr:hover {
     box-shadow: 0 0 0 0.2rem rgba(245,197,66,0.3) !important;
 }
 
+.form-control::placeholder {
+    color: #999; /* Viditeľnejší placeholder */
+}
+
 /* ======================== */
-/*          BUTTONS         */
+/* BUTTONS         */
 /* ======================== */
 
 .btn {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-weight: 600;
 }
-
-.btn:hover {
-    transform: translateY(-2px);
-}
+.btn:hover { transform: translateY(-2px); }
 
 .btn-primary {
     background-color: #f5c542 !important;
     color: black !important;
     border: none;
 }
+.btn-primary:hover { background-color: #ffdb70 !important; }
+
+.btn-success { background-color: #2ea043 !important; border: none; }
+.btn-danger { background-color: #da3633 !important; border: none; color: white !important; }
+.btn-warning { background-color: #f5c542 !important; border: none; color: black !important; }
 
 /* ======================== */
-/*     HOMEPAGE LAYOUT      */
+/* HOMEPAGE LAYOUT      */
 /* ======================== */
 
 .home-wrapper {
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
     padding: 20px;
 }
@@ -138,14 +208,14 @@ tr:hover {
     margin-bottom: 20px;
     text-align: center;
     box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    border: 1px solid #333;
 }
 
-.home-section p,
-.home-section .text-muted {
-    color: #dcdcdc !important;
+.home-section p {
+    color: #e0e0e0 !important; /* Svetlejší text popisu */
+    font-size: 1.1rem;
 }
 
-/* CARDS GRID */
 .home-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -158,27 +228,42 @@ tr:hover {
     border-radius: 12px;
     border: 1px solid #333;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
-/* FOOTER */
-.footer-note small,
-.text-muted {
-    color: #dcdcdc !important;
-}
+.home-card p { color: #ccc; } /* Svetlejší text v kartách */
 
 /* ======================== */
-/*     MOBILE OPTIMIZATION   */
+/* MOBILE OPTIMIZATION   */
 /* ======================== */
 
 @media (max-width: 768px) {
+    .container, .web-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+
+    .web-content {
+        min-height: 100vh;
+        background-color: #171717 !important;
+        padding: 15px !important;
+    }
 
     .home-wrapper { padding: 10px; }
-
     .home-section { padding: 20px; }
-
     .home-cards { grid-template-columns: 1fr; }
+    .home-card { padding: 20px; margin-bottom: 10px;}
 
-    .home-card { padding: 20px; }
+    h1 { font-size: 1.8rem; }
+    .btn { width: 100%; margin-bottom: 5px; }
+
+    .table-responsive { overflow-x: auto; }
 }
 
 /* ======================== */
@@ -190,7 +275,6 @@ tr:hover {
     padding: 0;
     margin: 0;
 }
-
 .web-content--full {
     background: transparent;
     padding: 20px;

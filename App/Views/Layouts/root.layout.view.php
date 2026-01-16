@@ -12,6 +12,8 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= App\Configuration::APP_NAME ?></title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
@@ -41,10 +43,10 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
 
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="<?= $link->url('home.index') ?>">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= $link->url('categories.index') ?>">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= $link->url('posts.index') ?>">Posts</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= $link->url('home.index') ?>">Domov</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= $link->url('categories.index') ?>">Kategórie</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= $link->url('posts.index') ?>">Články</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= $link->url('home.contact') ?>">Kontakt</a></li>
             </ul>
 
             <ul class="navbar-nav ms-auto">
@@ -56,9 +58,9 @@ $isHome = ($currentController === 'home' && $currentAction === 'index');
                     <?php endif; ?>
 
                     <li class="nav-item"><span class="nav-link">👤 <?= $user->getName() ?></span></li>
-                    <li class="nav-item"><a class="nav-link btn btn-warning px-3" href="<?= $link->url('auth.logout') ?>">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-warning px-3" href="<?= $link->url('auth.logout') ?>">Odhlásiť</a></li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="nav-link btn btn-warning px-3" href="<?= App\Configuration::LOGIN_URL ?>">Login</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-warning px-3" href="<?= App\Configuration::LOGIN_URL ?>">Prihlásiť / Registrovať</a></li>
                 <?php endif; ?>
             </ul>
         </div>

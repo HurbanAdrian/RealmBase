@@ -16,17 +16,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Krok 1: Kontrola čistých syntaktických chýb (či je PHP kód validný)
-      - name: PHP Syntax Check (Lint)
-        uses: overtrue/phplint@8.0  # Aktualizovaná verzia
+      # Nastavenie PHP prostredia
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          path: .
-          options: --exclude=vendor
+          php-version: '8.2'
 
-      # Krok 2: PHPCS - ak ho chceš nechať, ale nechceš, aby "zhadzoval" build
+      # Rýchla kontrola syntaxe všetkých súborov v App/
+      - name: Check PHP Syntax
+        run: |
+          find App/ -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      # PHP CodeSniffer beží, ale jeho výsledok nezhodí build (vďaka continue-on-error)
       - name: PHP CodeSniffer
         uses: php-actions/phpcs@v1
-        continue-on-error: true  # TENTO RIADOK ZABRÁNI POSIELANIU CHYBOVÝCH MAILOV
+        continue-on-error: true
         with:
           php_version: 8.2
           path: App/

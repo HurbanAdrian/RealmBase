@@ -30,7 +30,7 @@ $link = $this->app->getLinkGenerator();
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email (voliteľné)</label>
+                    <label for="email" class="form-label">Email</label>
                     <input type="email" name="email" id="email" class="form-control"
                            value="<?= htmlspecialchars($formData['email'] ?? '') ?>">
                 </div>

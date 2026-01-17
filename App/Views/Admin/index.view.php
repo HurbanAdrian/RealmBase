@@ -12,6 +12,10 @@ $currentUser = $this->app->getAppUser();
 
     <div class="card mt-4">
         <div class="card-body">
+            <div class="mb-3">
+                <input type="text" id="tableSearch" class="form-control" placeholder="🔍 Hľadať používateľa podľa mena alebo emailu...">
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead class="table-dark">

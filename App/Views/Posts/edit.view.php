@@ -60,8 +60,20 @@ $user_id = $user_id ?? $post->getUserId();
         <div class="mb-3">
             <label class="form-label d-block">Aktuálny obrázok:</label>
             <?php if ($post->getImage()): ?>
-                <img src="public/uploads/<?= $post->getImage() ?>" class="img-thumbnail mb-2" style="height: 100px;">
+                <div class="mb-2">
+                    <img src="public/uploads/<?= $post->getImage() ?>" class="img-thumbnail" style="height: 100px;">
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" name="remove_image" id="remove_image" value="1">
+                        <label class="form-check-label text-danger" for="remove_image">
+                            Odstrániť tento obrázok pri uložení
+                        </label>
+                    </div>
+                </div>
+            <?php else: ?>
+                <p class="text-muted small">Žiadny obrázok nie je nahraný.</p>
             <?php endif; ?>
+
+            <label for="image" class="form-label d-block">Nahrať nový (nahradí starý):</label>
             <input type="file" name="image" id="image" class="form-control" accept="image/*">
         </div>
 

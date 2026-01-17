@@ -186,6 +186,14 @@ class PostsController extends BaseController
             if ($categoryId <= 0) $errors[] = "Vyberte kategóriu.";
 
             if (empty($errors)) {
+                // --- LOGIKA ODSTRÁNENIA OBRÁZKA CEZ CHECKBOX ---
+                if ($request->post('remove_image') == '1') {
+                    if ($post->getImage() && file_exists('public/uploads/' . $post->getImage())) {
+                        unlink('public/uploads/' . $post->getImage());
+                    }
+                    $post->setImage(null);
+                }
+
                 $post->setTitle($title);
                 $post->setContent($content);
                 $post->setCategoryId($categoryId);
@@ -229,6 +237,14 @@ class PostsController extends BaseController
                 if ($post->getUserId() === $user->getId() || $user->getRole() === 'admin') {
 
                     try {
+                        // --- 1. ODSTRÁNENIE FOTKY Z DISKU ---
+                        if ($post->getImage()) {
+                            $imagePath = 'public/uploads/' . $post->getImage();
+                            if (file_exists($imagePath)) {
+                                unlink($imagePath); // Zmaže fyzický súbor
+                            }
+                        }
+
                         // 1. Zmažeme komentáre
                         $comments = \App\Models\Comment::getAll("post_id = ?", [$post->getId()]);
                         foreach ($comments as $comment) {
@@ -283,5 +299,25 @@ class PostsController extends BaseController
             }
         }
         return null;
+    }
+
+    public function deleteImage(Request $request): Response
+    {
+        $id = (int)$request->value('id');
+        $post = Post::getOne($id);
+        $user = $this->app->getAppUser();
+
+        // Kontrola oprávnení (autor alebo admin)
+        if ($post && ($post->getUserId() === $user->getId() || $user->getRole() === 'admin')) {
+            if ($post->getImage()) {
+                $filePath = 'public/uploads/' . $post->getImage();
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+                $post->setImage(null);
+                $post->save();
+            }
+        }
+        return $this->redirect($this->url('posts.edit', ['id' => $id]));
     }
 }

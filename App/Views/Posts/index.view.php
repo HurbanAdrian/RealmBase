@@ -8,6 +8,8 @@ $currentOrder = strtoupper($data['currentOrder'] ?? $_GET['order'] ?? 'DESC');
 
 $link = $this->app->getLinkGenerator();
 $user = $this->app->getAppUser(); // Prihlásený užívateľ
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-4">

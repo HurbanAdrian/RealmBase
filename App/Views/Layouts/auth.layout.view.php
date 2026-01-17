@@ -4,6 +4,8 @@
  * @var \Framework\Auth\AppUser $user
  * @var \Framework\Support\LinkGenerator $link
  */
+
+// Implementované s asistenciou AI
 ?>
 <!DOCTYPE html>
 <html lang="sk">

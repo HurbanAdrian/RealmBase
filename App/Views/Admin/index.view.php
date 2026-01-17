@@ -3,6 +3,8 @@
 /** @var \Framework\Core\App $this */
 $link = $this->app->getLinkGenerator();
 $currentUser = $this->app->getAppUser();
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-5">

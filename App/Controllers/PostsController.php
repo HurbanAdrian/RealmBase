@@ -9,6 +9,8 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
+// Implementované s asistenciou AI
+
 class PostsController extends BaseController
 {
     /**

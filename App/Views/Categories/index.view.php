@@ -6,6 +6,8 @@
 $link = $this->app->getLinkGenerator();
 $user = $this->app->getAppUser();
 $isAdmin = ($user && $user->isLoggedIn() && $user->getRole() === 'admin');
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-4">

@@ -8,6 +8,8 @@
 $currentController = $_GET['c'] ?? 'home';
 $currentAction = $_GET['a'] ?? 'index';
 $isHome = ($currentController === 'home' && $currentAction === 'index');
+
+// Implementované s asistenciou AI
 ?>
 <!DOCTYPE html>
 <html lang="sk">

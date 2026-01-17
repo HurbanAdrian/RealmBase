@@ -5,6 +5,7 @@ namespace App\Auth;
 use App\Models\User;
 use Framework\Auth\SessionAuthenticator;
 
+// Implementované s asistenciou AI
 class SessionAuthenticatorImpl extends SessionAuthenticator
 {
     protected function authenticate(string $username, string $password): ?\Framework\Core\IIdentity

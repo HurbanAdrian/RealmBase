@@ -14,6 +14,8 @@
  *
  * @var string|null $description
  */
+
+// Implementované s asistenciou AI
 ?>
 <h1>Pridať kategóriu</h1>
 

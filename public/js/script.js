@@ -5,6 +5,8 @@
  * Rieši interaktivitu, AJAX volania a animácie.
  */
 
+// Implementované s asistenciou AI
+
 console.log("REALMBASE SCRIPT LOADED - FINAL VERSION WITH COMMENTS & VALIDATION");
 
 document.addEventListener("DOMContentLoaded", () => {

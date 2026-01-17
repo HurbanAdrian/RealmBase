@@ -11,6 +11,8 @@
  */
 
 $view->setLayout('auth');
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container">

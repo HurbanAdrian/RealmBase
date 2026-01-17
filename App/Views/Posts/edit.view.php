@@ -11,6 +11,8 @@ $title = $title ?? $post->getTitle();
 $content = $content ?? $post->getContent();
 $category_id = $category_id ?? $post->getCategoryId();
 $user_id = $user_id ?? $post->getUserId();
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-4">

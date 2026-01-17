@@ -3,6 +3,8 @@
 /** @var array $formData */
 /** @var \Framework\Core\App $this */
 $link = $this->app->getLinkGenerator();
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="col-md-4 mx-auto mt-5">

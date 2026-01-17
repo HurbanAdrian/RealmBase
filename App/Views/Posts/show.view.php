@@ -9,6 +9,8 @@ $link = $this->app->getLinkGenerator();
 if (!isset($user)) {
     $user = $this->app->getAppUser();
 }
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-4">

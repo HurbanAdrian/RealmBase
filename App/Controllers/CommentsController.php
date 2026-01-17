@@ -8,6 +8,8 @@ use Framework\Http\Responses\Response;
 use Framework\Http\Responses\JsonResponse;
 use App\Models\Comment;
 
+// Implementované s asistenciou AI
+
 class CommentsController extends BaseController
 {
     /**

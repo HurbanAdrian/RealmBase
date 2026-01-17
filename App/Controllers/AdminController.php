@@ -6,6 +6,8 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
+// Implementované s asistenciou AI
+
 /**
  * Class AdminController
  * Manages admin-related actions: listing and deleting users.

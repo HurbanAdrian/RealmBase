@@ -1,6 +1,8 @@
 <?php
 /** @var \Framework\Core\App $this */
 $link = $this->app->getLinkGenerator();
+
+// Implementované s asistenciou AI
 ?>
 
 <div class="container mt-4">

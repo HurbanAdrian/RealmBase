@@ -9,6 +9,8 @@ use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
 
+// Implementované s asistenciou AI
+
 /**
  * Class AuthController
  */

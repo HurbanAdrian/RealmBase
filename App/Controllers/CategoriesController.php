@@ -7,6 +7,8 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
+// Implementované s asistenciou AI
+
 class CategoriesController extends BaseController
 {
     public function index(Request $request): Response

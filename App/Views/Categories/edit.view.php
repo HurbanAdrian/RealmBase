@@ -4,6 +4,8 @@
  *
  * @var \App\Models\Category $category
  */
+
+// Implementované s asistenciou AI
 ?>
 
 <h1>Upraviť kategóriu</h1>

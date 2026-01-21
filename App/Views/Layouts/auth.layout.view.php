@@ -30,7 +30,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
-            <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" height="32">
+            <img src="<?= $link->asset('images/RB_logo.png') ?>" height="32">
             REALMBASE
         </a>
 

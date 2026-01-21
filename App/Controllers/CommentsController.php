@@ -115,54 +115,52 @@ class CommentsController extends BaseController
     /**
      * Upraví komentár (AJAX)
      */
-    public function edit(\Framework\Http\Request $request)
+    /**
+     * Upraví komentár (AJAX) - Zjednotený štýl s add/delete
+     */
+    public function edit(Request $request): Response
     {
+        // 1. Overenie prihlásenia
+        $user = $this->app->getAppUser();
+        if (!$user || !$user->isLoggedIn()) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Musíte byť prihlásený'], 401);
+        }
+
+        // 2. Získanie dát
+        $id = (int)$request->post('id');
+        $newContent = trim($request->post('content') ?? '');
+
+        // 3. Validácia
+        if ($id <= 0 || empty($newContent)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Neplatné ID alebo prázdny obsah'], 400);
+        }
+
+        if (mb_strlen($newContent) < 3) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Komentár je príliš krátky'], 400);
+        }
+
+        if (mb_strlen($newContent) > 1000) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Komentár je príliš dlhý (max 1000 znakov)'], 400);
+        }
+
+        // 4. Nájdenie komentára a overenie práv
+        $comment = Comment::getOne($id);
+        if (!$comment) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Komentár neexistuje'], 404);
+        }
+
+        if ($comment->getUserId() !== $user->getId() && $user->getRole() !== 'admin') {
+            return new JsonResponse(['status' => 'error', 'message' => 'Nemáte právo upraviť tento komentár'], 403);
+        }
+
         try {
-            // 1. Získanie aktuálneho používateľa
-            $currentUser = $this->app->getAppUser();
-
-            // 2. Overenie prihlásenia
-            if (!$currentUser->isLoggedIn()) {
-                throw new \Exception('Musíte byť prihlásený.');
-            }
-
-            // 3. Získanie dát (cez $_POST pre istotu)
-            $id = (int)($_POST['id'] ?? 0);
-            $newContent = trim($_POST['content'] ?? '');
-
-            if ($id <= 0 || empty($newContent)) {
-                throw new \Exception('Chýbajúce dáta (ID alebo obsah).');
-            }
-
-            // --- KONTROLA DĹŽKY ---
-            if (mb_strlen($newContent) > 1000) {
-                throw new \Exception('Komentár je príliš dlhý (maximum je 1000 znakov).');
-            }
-
-            // 4. Nájdenie komentára
-            $comment = \App\Models\Comment::getOne($id);
-
-            if (!$comment) {
-                throw new \Exception('Komentár neexistuje.');
-            }
-
-            // 5. Overenie oprávnení
-            if ($comment->getUserId() !== $currentUser->getId() && $currentUser->getRole() !== 'admin') {
-                throw new \Exception('Nemáte oprávnenie upraviť tento komentár.');
-            }
-
-            // 6. Uloženie
+            // 5. Uloženie
             $comment->setContent($newContent);
             $comment->save();
 
-            // 7. Odoslanie JSON odpovede (ZJEDNOTENÉ S OSTATNÝMI METÓDAMI)
             return new JsonResponse(['status' => 'success']);
-
         } catch (\Throwable $e) {
-            return new JsonResponse([
-                'status' => 'error',
-                'message' => 'Chyba: ' . $e->getMessage()
-            ], 500);
+            return new JsonResponse(['status' => 'error', 'message' => 'Chyba servera: ' . $e->getMessage()], 500);
         }
     }
 }

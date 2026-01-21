@@ -62,7 +62,14 @@ class AdminController extends BaseController
                 // 2. Zmažeme všetky ČLÁNKY tohto používateľa
                 $userPosts = \App\Models\Post::getAll("user_id = ?", [$id]);
                 foreach ($userPosts as $post) {
-                    // Najprv zmažeme komentáre k článku
+                    // 1. Zmažeme fotku z disku
+                    if ($post->getImage()) {
+                        $imagePath = 'public/uploads/' . $post->getImage();
+                        if (file_exists($imagePath)) {
+                            unlink($imagePath);
+                        }
+                    }
+                    // Potom zmažeme komentáre k článku
                     $postComments = \App\Models\Comment::getAll("post_id = ?", [$post->getId()]);
                     foreach ($postComments as $pc) {
                         $pc->delete();
